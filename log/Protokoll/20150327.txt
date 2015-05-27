@@ -1,0 +1,35 @@
+PowerRacer, second meeting
+
+Date: 2015-03-27
+Present: Marco Leu, Florian Spiess, Simeon Jackman, Benjamin Zumbrunn
+Minute taker: Benjamin
+
+Code Style
+- We use the Java naming convention
+- There will be a code style guideline in 'log'
+
+Ant
+- We set up Ant when we need it, for now it's redundant
+
+Wikia duties
+- Simeon controls the content
+- We use Wikia for programming-related, game-related and off-topic stuff
+- We delete no content, ever, for memories
+
+Gantt Chart
+- Benjamin revises the chart and builds in slack time
+
+Programming diary
+- We ask our tutor, if it's necessary to write about every line of code we write (not commenting, commenting everything is obviously necessary)
+
+Tasks and duties until milestone 2
+- Communication protocol: Marco, Florian and Benjamin
+- Server-client connection: Marco and Benjamin
+- Small GUI for connection: Florian
+- Combining server-client and GUI: Marco and Florian
+- Wikia: Simeon
+- Software quality: Benjamin
+
+Milestone 2
+- Network-communication: in progress
+- Communication protocol: in progress

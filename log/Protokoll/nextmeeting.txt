@@ -1,0 +1,12 @@
+To discuss at meeting 2:
+
+- Code Style
+- Ant
+- Wikia duties
+- Gantt-Chart revision
+- programming diary
+- Revision of tasks and duties
+- Current state of communication protocol
+- Current state of server-client connection
+- Milestone 2
+- Next steps

@@ -1,0 +1,42 @@
+PowerRacer, fourth meeting
+
+Date: 2015-04-20
+Present: Marco Leu, Florian Spiess, Simeon Jackman, Benjamin Zumbrunn
+Minute taker: Benjamin
+
+Last protocol 
+- Unfortunately, the file is lost... Where is it???
+- We found it, will be commited afterwards
+
+What we have for milestone 4
+- Everything except JUnit-Test
+
+What we do until milestone 4 (with priority)
+--- LobbyClient
+- Car selection (1) (Florian)
+- Track selection (1) (Florian)
+- Mute-button (1) (Simeon)
+- Help-button for controls (1)
+- Delete c-command (2) (Florian) --> already done
+- Linked list with players (2)
+- Linked list in lobby with player-ready (2)
+--- LobbyServer
+- Catch car selection (1)
+- Catch track selection (1)
+- Sending player-info in linked list (2)
+--- GameClient
+- Collidable clientside (0)
+- Mute-button (1) (Simeon) --> already done
+- New tiles and tracks (2)
+--- GameServer
+- Parse collidable with boxes (0)
+--- Other
+- JUnit-Test ServerParser (0) (Benjamin)
+- Wikia (1) (Simeon)
+
+Integration test
+- Sound is not working on linux computers --> now it's working
+
+Off-topic
+- Bouton is french for button, Mouton is french for sheep
+- There is really no word in german for deceleration

@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<project name="PowerRacer" default="main" basedir=".">
+
+	<!-- Create classpath -->
+
+	<property name="lib" location="lib" />
+
+	<path id="powerracer-classpath">
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir=".">
+			<include name="*.properties" />
+		</fileset>
+	</path>
+	<property name="powerracer-classpath-jar" value="${toString:powerracer-classpath}" />
+	<path id="junit.class.path">
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="build" />
+	</path>
+
+	<!-- Variables -->
+
+	<property name="build.test.dir" location="build/tests" />
+	<property name="test.dir" location="src/test" />
+	<property name="test.results" location="build/testresults" />
+
+	<property name="app.name" value="PowerRacer" />
+
+	<!-- 
+	If you want to include Javadocs in the build, just include 'javadoc' in 'depends' below
+	-->
+	<target name="main" depends="clean, build, jar, build-junittests, junit, readme, run">
+	</target>
+
+	<target name="clean">
+		<delete dir="build" />
+		<mkdir dir="build" />
+	</target>
+
+	<target name="build">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" 
+			destdir="build/classes" 
+			excludes="**/*Test.java" 
+			includes="**/*.java" />
+	</target>
+
+	<target name="build-junittests" depends="build">
+		<javac srcdir="src" destdir="build/classes">
+			<classpath refid="junit.class.path" />
+		</javac>
+	</target>
+	
+	<target name="readme" depends="jar">
+		<copy file="README.txt" todir="build" />
+		<copy file="Handbook.pdf" todir="build" />
+	</target>
+
+	<target name="jar">
+		<copydir src="src/shared/game/images/"
+		         dest="build/classes/shared/game/images" />
+		<copydir src="src/client/gui/sounds/"
+		         dest="build/classes/client/gui/sounds" />
+		<jar destfile="build/${app.name}.jar" basedir="build/classes">
+			<manifest>
+				<attribute name="Main-Class" value="client/gui/ClientGUI" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="junit" description="Runs unit tests" depends="jar, build-junittests">
+		<mkdir dir="${test.results}"/>
+
+		<junit printsummary="yes" fork="true" haltonfailure="yes">
+			<classpath refid="junit.class.path" />
+			<classpath>
+				<pathelement location="build/classes"/>
+			</classpath>
+			<formatter type="xml" />
+			<batchtest todir="${test.results}">
+				<fileset dir="src">
+					<include name="**/*Test.java"/>
+					<exclude name="**/CameraTest.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="run">
+		<java jar="build/${app.name}.jar" fork="true" />
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="build/javadoc" />
+		<javadoc destdir="build/javadoc"
+				 classpathref="junit.class.path"
+		         classpath="."
+		         author="true"
+		         version="true"
+		         use="true"
+		         windowtitle="${app.name} API">
+			<fileset dir="src" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+	</target>
+
+</project>

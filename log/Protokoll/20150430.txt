@@ -1,0 +1,47 @@
+PowerRacer, fifth meeting
+
+Date: 2015-04-30
+Present: Simeon Jackman, Florian Spiess, Marco Leu, Benjamin Zumbrunn
+Minute taker: Benjamin Zumbrunn
+
+Lookback on fourth meeting:
+- Wikia still needs some updates (Simeon, Benjamin)
+- Linked list with players (TODO) (Marco, Florian)
+- Linked list in lobby with player-ready (TODO) (Marco, Florian)
+- Sending player-info in linked list (TODO) (Marco, Florian)
+- Random track generator is implemented
+
+What we do until milestone 5 (with priority)
+--- Tests
+- JUnit test: testing of extreme cases (null, sending of bad packets ...) (Benjamin) (0)
+- JUnit eclemma --> only green lines (Benjamin) (0)
+--- Completion of implementation
+- Pausing (Marco, Florian) (0)
+--- Refactoring
+- set some variables private (Marco) (1)
+- Code conventions (Benjamin) (1)
+- Documentation of source code (all) (1)
+--- Project diary
+- Florian sets it up, so that everybody can add their jazz (0)
+--- Presentation
+- will be discussed at next meeting
+- Project documentation
+- Screenshot (Florian)
+- Software Quality, especially JUnit test (Benjamin)
+--- Not really needed , but nice-to-have stuff
+- Logging (Florian) (2)
+- PowerUps (Florian) (2)
+- Music and sound (Simeon, Benjamin) (2)
+- Balancing (Marco) (2)
+- Pictures and values of cars in lobby (Florian) (2)
+- One or two maps (Benjamin) (2)
+
+Deadlines and dates for milestone 5:
+- Check in: 2015-05-18 (Monday)
+- Practice group: 2015-05-20 (Wednesday)
+- Presentation: not yet known
+
+Off-topic:
+- Simeon was the swiss champion in powerlifting once
+- Simeon only just now knows the offtopic from the very first meeting, even though he was there then
+- Apache is not helpful when something does not work

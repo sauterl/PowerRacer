@@ -1,0 +1,17 @@
+----- Style convention
+
+- There's a .xml file in log which can be imported to eclipse
+- Braces are always used, even when optional
+- Blocks: K&R style
+- Block indentation: 4 spaces
+- Column limit: 80 characters (everything else is weird)
+- There are some limit exceptions like JavaDoc links
+- Always use CTRL+SHIFT+F after editing (use PowerRacerFormattingStyle.xml)
+- There's no such thing as too many comments
+
+-----  Naming convention
+
+- Package names: every letter is small (packageexample)
+- Class names: UpperCamelCase
+- Method names: lowerCamelCase
+- Constant names: CONSTANTCASE

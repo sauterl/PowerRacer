@@ -1,0 +1,13 @@
+- First line: short summary of the method
+- Inline tag: {@link <a href="http...">Something about link</a>}
+- <p> separates paragraphs
+- empty line between description and tags
+- @author, for more authors new @author tags below
+- @version
+- @since datum
+- @exception
+- @see
+- @serial
+- @deprecated (veraltet)
+- <i>italics<\i>
+- <b>BOLD<\b>

@@ -1,0 +1,35 @@
+PowerRacer, sixth meeting
+
+Date: 2015-05-03
+Present: Simeon Jackman, Florian Spiess, Marco Leu, Benjamin Zumbrunn
+Guests: Yannick Ruemmele, Renat Sakenov
+Minute taker: Benjamin Zumbrunn
+
+Next meeting: 
+- Monday or tuesday (next week)
+
+Status:
+- Pausing is implemented
+- presentation has been posponed to next meeting
+
+We appended the following tasks to our TODO-list
+- installation guide
+
+Nice to have:
+- Lap time
+- number of players in lobby
+- names of players in lobby
+- ready indicator in lobby
+- lightning powerup
+- effect packet
+- collidable cars
+
+Next programming marathon:
+- Saturday, 11 am, Benjamin's place (the address is on his website, benzumbrunn.ch)
+
+Off-topic:
+- Standup comedian star: Marco
+- this sunday is mother's day
+- Simeon has an important soccer game on sunday
+- Florian is underage in the "great" United States of America
+- Simeon has an obsession with Denmark
