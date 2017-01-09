@@ -568,9 +568,21 @@ public class LobbyLogicTest {
 				.getLobbyID());
 		LobbyLogic.joinLobby(lobbyJoiningPlayer3, testPlayer.getLobby()
 				.getLobbyID());
+		Player lobbyJoiningPlayer4 = createNewTemporaryPlayer();
+		Player lobbyJoiningPlayer5 = createNewTemporaryPlayer();
+		LobbyLogic.joinLobby(lobbyJoiningPlayer4, testPlayer.getLobby()
+				.getLobbyID());
+		LobbyLogic.joinLobby(lobbyJoiningPlayer5, testPlayer.getLobby()
+				.getLobbyID());
+		Player lobbyJoiningPlayer6 = createNewTemporaryPlayer();
+		Player lobbyJoiningPlayer7 = createNewTemporaryPlayer();
+		LobbyLogic.joinLobby(lobbyJoiningPlayer6, testPlayer.getLobby()
+				.getLobbyID());
+		LobbyLogic.joinLobby(lobbyJoiningPlayer7, testPlayer.getLobby()
+				.getLobbyID());
 		// the last player should not be in the lobby
 		assertFalse(testPlayer.getLobby().getLobbylist()
-				.contains(lobbyJoiningPlayer3));
+				.contains(lobbyJoiningPlayer7));
 
 		// copy player needs to leave lobby and create a new one for next test
 		LobbyLogic.leaveLobby(testPlayerCopy, testPlayerCopy.getLobby()
@@ -587,6 +599,11 @@ public class LobbyLogicTest {
 		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer);
 		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer2);
 		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer3);
+		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer4);
+		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer5);
+		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer6);
+		LobbyLogic.removePlayerComplete(lobbyJoiningPlayer7);
+		
 
 		// the players need to leave the lobby
 		LobbyLogic.leaveLobby(testPlayer, testPlayer.getLobby().getLobbyID());
