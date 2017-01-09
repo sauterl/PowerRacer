@@ -64,7 +64,7 @@ public class Camera extends Component {
 			scoreboardFont = new Font("Courier", Font.BOLD, 40);
 	private boolean control, complete, c, showNames = true, fullscreen, exitMenu;
 	private static final String[] scoreboardPrefixes = { "1st:", "2nd:",
-			"3rd:", "4th:" };
+			"3rd:", "4th:", "5th:", "6th:", "7th:", "8th:" };
 
 	private ConcurrentLinkedQueue<Powerup> powerupVFXList = new ConcurrentLinkedQueue<Powerup>();
 

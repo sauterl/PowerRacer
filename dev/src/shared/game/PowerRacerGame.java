@@ -217,7 +217,7 @@ public class PowerRacerGame {
 	}
 
 	public Image getCarImage(int carNum) {
-		int num = carNum + (cars[carNum].getImageNum()) * 4; // 4 is the number
+		int num = (carNum % 4) + (cars[carNum].getImageNum()) * 4; // 4 is the number
 															 // of different
 															 // colors available
 		return track.getCarImage(num);
