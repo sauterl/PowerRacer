@@ -211,7 +211,8 @@ public class RaceTrack {
 	private void loadIce() {
 		tileMap = PresetTracks.RACETRACK_ICE;
 		startingPositions = new int[][] { { 22, 3 }, { 21, 4 }, { 22, 5 },
-				{ 21, 6 } };
+				{ 21, 6 }, { 21, 3 }, { 22, 4 }, { 21, 5 },
+				{ 22, 6 } };
 		itemBoxPositions = new int[][] { { 45, 7 }, { 48, 7 }, { 36, 16 },
 				{ 36, 18 }, { 52, 28 }, { 52, 25 }, { 28, 48 }, { 28, 49 },
 				{ 28, 50 }, { 32, 58 }, { 16, 55 }, { 5, 30 }, { 6, 30 },
@@ -224,7 +225,8 @@ public class RaceTrack {
 	private void loadSand() {
 		tileMap = PresetTracks.RACETRACK_SAND;
 		startingPositions = new int[][] { { 28, 2 }, { 27, 3 }, { 28, 4 },
-				{ 27, 5 } };
+				{ 27, 5 }, { 27, 2 }, { 28, 3 }, { 27, 4 },
+				{ 28, 5 } };
 		itemBoxPositions = new int[][] { { 47, 38 }, { 46, 38 }, { 45, 38 },
 				{ 44, 38 }, { 32, 36 }, { 33, 36 }, { 34, 36 }, { 35, 36 },
 				{ 4, 36 }, { 5, 36 }, { 6, 36 }, { 7, 36 }, { 8, 36 },
@@ -237,7 +239,8 @@ public class RaceTrack {
 	private void loadGrass() {
 		tileMap = PresetTracks.RACETRACK_GRASS;
 		startingPositions = new int[][] { { 9, 3 }, { 9, 2 }, { 9, 1 },
-				{ 8, 3 } };
+				{ 8, 3 }, { 8, 2 }, { 8, 1 }, { 7, 3 },
+				{ 7, 2 } };
 		itemBoxPositions = new int[][] { { 16, 9 }, { 17, 9 }, { 18, 9 } };
 		defaultTile = 0;
 		maxCheckpoint = 3;
@@ -247,7 +250,8 @@ public class RaceTrack {
 	private void loadSmall() {
 		tileMap = PresetTracks.RACETRACK_SMALL;
 		startingPositions = new int[][] { { 18, 22 }, { 19, 23 }, { 18, 24 },
-				{ 19, 25 } };
+				{ 19, 25 }, { 19, 22 }, { 18, 23 }, { 19, 24 },
+				{ 18, 25 } };
 		itemBoxPositions = new int[][] { { 20, 4 }, { 20, 5 }, { 20, 6 },
 				{ 20, 7 } };
 		defaultTile = 0;

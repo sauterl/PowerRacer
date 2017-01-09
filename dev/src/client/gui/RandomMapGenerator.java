@@ -455,12 +455,14 @@ public class RandomMapGenerator {
 	public static int[][] stringToStartingPositions(String s) {
 		try {
 			String[] items = s.split("/");
-			int[][] pos = new int[4][2];
+			int[][] pos = new int[8][2];
 			String[] rows = items[2].split("%");
 			for (int i = 0; i < rows.length; i++) {
 				String[] place = rows[i].split("&");
 				pos[i][0] = Integer.parseInt(place[0]);
 				pos[i][1] = Integer.parseInt(place[1]);
+				pos[i + rows.length][0] = Integer.parseInt(place[0]) - 1;
+				pos[i + rows.length][1] = Integer.parseInt(place[1]);
 				// System.out.println( Integer.parseInt(place[0]) + "/" +
 				// Integer.parseInt(place[1]));
 

@@ -50,7 +50,7 @@ public class GameManager {
 		for (int i = 0; i < lobby.getLobbylist().size(); i++) {
 			carTypes[i] = lobby.getLobbylist().get(i).getCarIndex();
 		}
-		PowerRacerGame game = new PowerRacerGame(4, raceTrack, carTypes, 4,
+		PowerRacerGame game = new PowerRacerGame(lobby.getLobbylist().size(), raceTrack, carTypes, 4,
 				new ConcurrentLinkedQueue<String>());
 		getGamelist().add(game);
 		ArrayList<String> names = new ArrayList<String>();

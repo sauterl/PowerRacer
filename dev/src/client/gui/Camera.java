@@ -62,7 +62,7 @@ public class Camera extends Component {
 	private Font font = new Font("Arial", Font.BOLD, 25),
 			countDownFont = new Font("Arial", Font.BOLD, 40),
 			scoreboardFont = new Font("Courier", Font.BOLD, 40);
-	private boolean control, complete, c, showNames = true, fullscreen;
+	private boolean control, complete, c, showNames = true, fullscreen, exitMenu;
 	private static final String[] scoreboardPrefixes = { "1st:", "2nd:",
 			"3rd:", "4th:" };
 
@@ -364,9 +364,7 @@ public class Camera extends Component {
 			int dispX = (int) stringBounds.getWidth() / 2;
 			g.drawString("Press x to return to lobby.", RENDER_WIDTH / 2
 					- dispX, 3 * RENDER_HEIGHT / 4 - 15);
-		}
-
-		if (game.getPause()) {
+		} else if (game.getPause()) {
 			g.setFont(countDownFont);
 			Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(
 					"A PLAYER HAS LEFT THE GAME", g);
@@ -394,8 +392,34 @@ public class Camera extends Component {
 			g.setColor(Color.BLACK);
 			g.drawString("Press x to return to lobby.", RENDER_WIDTH / 2
 					- dispX2, 3 * RENDER_HEIGHT / 4 - 15);
-		}
+		} else if (exitMenu) {
+            String message = "Leave Game?";
+            g.setFont(countDownFont);
+            drawStringCenteredWithBox(g, message, 0);
+
+            String info1 = "Press x to return to lobby.";
+            g.setFont(font);
+            drawStringCenteredWithBox(g, info1, RENDER_HEIGHT / 8);
+
+            String info2 = "Press esc to close menu.";
+            g.setFont(font);
+            drawStringCenteredWithBox(g, info2, RENDER_HEIGHT / 4);
+        }
 	}
+	
+	private void drawStringCenteredWithBox(Graphics g, String text, int deltaY) {
+        Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(text, g);
+        int dispX = (int) stringBounds.getWidth() / 2;
+        int dispY = (int) stringBounds.getHeight() / 2;
+        int posX = RENDER_WIDTH / 2 - dispX;
+        int posY = RENDER_HEIGHT / 2 - dispY;
+        g.setColor(Color.BLACK);
+        g.fillRect(posX - 10, posY - 10 + deltaY, 2 * dispX + 20, 2 * dispY + 20);
+        g.setColor(Color.WHITE);
+        g.fillRect(posX - 5, posY - 5 + deltaY, 2 * dispX + 10, 2 * dispY + 10);
+        g.setColor(Color.BLACK);
+        g.drawString(text, posX, posY + (int) (1.7 * dispY) + deltaY);
+    }
 
 	/**
 	 * Checks if the given point (x,y) lies within the bounds of the Camera and
@@ -507,6 +531,13 @@ public class Camera extends Component {
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
 			control = game.getControl();
+			
+			if (complete || game.getPause() || exitMenu) {
+				if (keyCode == KeyEvent.VK_X) {
+					clientGUI.returnToLobby();
+					sm.stopSound(music);
+				}
+			}
 
 			if (control) {
 				if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) {
@@ -532,13 +563,7 @@ public class Camera extends Component {
 					sm.loopSound(2);
 				}
 
-			} else
-				if (complete || game.getPause()) {
-					if (keyCode == KeyEvent.VK_X) {
-						clientGUI.returnToLobby();
-						sm.stopSound(music);
-					}
-				}
+			}
 
 			if ((keyCode == KeyEvent.VK_EQUALS || keyCode == KeyEvent.VK_PLUS || keyCode == KeyEvent.VK_P)
 					&& zoomLevel > 10) {
@@ -622,6 +647,9 @@ public class Camera extends Component {
 				}
 				fullscreen = !fullscreen;
 			}
+			if (keyCode == KeyEvent.VK_ESCAPE) {
+                exitMenu = !exitMenu;
+            }
 		}
 	}
 

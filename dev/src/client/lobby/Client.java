@@ -247,6 +247,7 @@ public class Client implements Runnable {
 				// To do with RandomTrack
 			}
 		}
+		System.out.println("Setting game!");
 		game = new PowerRacerGame(numberOfPlayers, raceTrackNumber, carTypes,
 				carIndex, commandQueue);
 		game.setPlayerNames(playerNames);
@@ -336,11 +337,8 @@ public class Client implements Runnable {
 	 * @param fourthTime
 	 *            the fourth player's finish time
 	 */
-	public void setScoreboard(String first, int firstTime, String second,
-			int secondTime, String third, int thirdTime, String fourth,
-			int fourthTime) {
-		game.setScoreboard(first, firstTime, second, secondTime, third,
-				thirdTime, fourth, fourthTime);
+	public void setScoreboard(int[] times, String[] names) {
+		game.setScoreboard(times, names);
 	}
 
 	/**

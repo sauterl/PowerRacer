@@ -33,7 +33,7 @@ public class PowerRacerGame {
 	int numberOfPlayers;
 	ArrayList<String> players = new ArrayList<String>();
 	ArrayList<String> finishedPlayers = new ArrayList<String>();
-	int[] times = new int[4];
+	int[] times;
 	private byte trackIdentifier;
 	String[] playerNames;
 	private PowerupManager PowerupManager;
@@ -438,18 +438,11 @@ public class PowerRacerGame {
 				+ Math.pow(cars[carIndex].getY() - c.getY(), 2)) < Camera.TILE_SIDE_LENGTH;
 	}
 
-	public void setScoreboard(String first, int firstTime, String second,
-			int secondTime, String third, int thirdTime, String fourth,
-			int fourthTime) {
-		finishedPlayers.add(first);
-		finishedPlayers.add(second);
-		finishedPlayers.add(third);
-		finishedPlayers.add(fourth);
-
-		times[0] = firstTime;
-		times[1] = secondTime;
-		times[2] = thirdTime;
-		times[3] = fourthTime;
+	public void setScoreboard(int[] times, String[] names) {
+		this.times = times;
+		for (String name : names) {
+			finishedPlayers.add(name);
+		}
 	}
 
 	public String[] getScoreboard() {

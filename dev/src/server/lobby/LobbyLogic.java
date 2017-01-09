@@ -258,7 +258,7 @@ public class LobbyLogic {
 	 * @return boolean if LobbyHasPlace
 	 */
 	private static boolean lobbyHasPlace(int lobbyID) {
-		if (LobbyManager.getLobby(lobbyID).getLobbylist().size() < 4) {
+		if (LobbyManager.getLobby(lobbyID).getLobbylist().size() < 8) {
 			return true;
 		} else {
 			return false;

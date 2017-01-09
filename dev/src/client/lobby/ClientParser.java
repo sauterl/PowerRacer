@@ -182,10 +182,21 @@ class ClientParser {
 					setLobbyReadyFeedbackFalse();
 					break;
 				case GCRER:
-					if (checkPacket(Arrays.copyOf(parts, 8), 8, new String[] {
-							"String", "int", "int", "int", "int", "int", "int",
-							"byte" })) {
-						sendLobbyUnReadyRequestAndStartGame(parts);
+					if (parts.length > 3 && isInt(parts[1])) {
+						int numberOfPlayers = Integer.parseInt(parts[1]);
+						String[] types = new String[numberOfPlayers + 4];
+						types[0] = "String";
+						for (int i = 1; i < types.length - 1; i++) {
+							types[i] = "int";
+						}
+						types[types.length - 1] = "byte";
+						if (checkPacket(Arrays.copyOf(parts, types.length), types.length, types)) {
+							sendLobbyUnReadyRequestAndStartGame(parts);
+						} else {
+							for (int i = 0; i < types.length; i++) {
+								System.out.println(parts[i] + " " + types[i]);
+							}
+						}
 					}
 					break;
 				case GINPI:
@@ -350,42 +361,26 @@ class ClientParser {
 		client.clientGUI
 				.addToChat("-----------------------------------------------\n                                Game History\n-----------------------------------------------");
 		for (int i = 1; i < parts.length; i++) {
-
 			String[] historyContent = parts[i].split(",");
 			StringBuilder result = new StringBuilder(150);
-			if (historyContent.length == 10) {
+			if (historyContent.length > 3) {
 				String date = historyContent[0];
 				String trackName = historyContent[1];
-				String playerOne = historyContent[2];
-				int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(Long
-						.parseLong(historyContent[3]));
-				int milliseconds = (int) Long.parseLong(historyContent[3]) % 1000;
-				String scoreOne = seconds + "." + milliseconds + "s";
-				String playerTwo = historyContent[4];
-				seconds = (int) TimeUnit.MILLISECONDS.toSeconds(Long
-						.parseLong(historyContent[5]));
-				milliseconds = (int) Long.parseLong(historyContent[5]) % 1000;
-				String scoreTwo = seconds + "." + milliseconds + "s";
-				String playerThree = historyContent[6];
-				seconds = (int) TimeUnit.MILLISECONDS.toSeconds(Long
-						.parseLong(historyContent[7]));
-				milliseconds = (int) Long.parseLong(historyContent[7]) % 1000;
-				String scoreThree = seconds + "." + milliseconds + "s";
-				String playerFour = historyContent[8];
-				seconds = (int) TimeUnit.MILLISECONDS.toSeconds(Long
-						.parseLong(historyContent[9]));
-				milliseconds = (int) Long.parseLong(historyContent[9]) % 1000;
-				String scoreFour = seconds + "." + milliseconds + "s";
-
 				result.append("Game from ");
 				result.append(date.replace(";", ":"));
 				result.append(" on ");
 				result.append(trackName);
 				result.append("\n");
-				result.append(playerOne + ": " + scoreOne + "\n");
-				result.append(playerTwo + ": " + scoreTwo + "\n");
-				result.append(playerThree + ": " + scoreThree + "\n");
-				result.append(playerFour + ": " + scoreFour);
+				String delimiter = "";
+				for (int j = 2; j + 1 < historyContent.length; j += 2) {
+					String player = historyContent[j];
+					int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(Long
+							.parseLong(historyContent[j + 1]));
+					int milliseconds = (int) Long.parseLong(historyContent[3]) % 1000;
+					String score = seconds + "." + milliseconds + "s";
+					result.append(delimiter + player + ": " + score);
+					delimiter = "\n";
+				}
 			} else
 				if (historyContent.length < 10) {
 					client.clientGUI.addToChat("Game History Corrupted!");
@@ -437,10 +432,14 @@ class ClientParser {
 	}
 
 	private void setGameResults(String[] parts) {
-		client.setScoreboard(parts[2], Integer.parseInt(parts[1]), parts[4],
-				Integer.parseInt(parts[3]), parts[6],
-				Integer.parseInt(parts[5]), parts[8],
-				Integer.parseInt(parts[7]));
+		int length = (parts.length - 1) / 2;
+		int[] times = new int[length];
+		String[] names = new String[length];
+		for (int i = 0; i < length; i++) {
+			times[i] = Integer.parseInt(parts[i * 2 + 1]);
+			names[i] = parts[i * 2 + 2];
+		}
+		client.setScoreboard(times, names);
 		client.setGameComplete();
 	}
 
@@ -462,16 +461,19 @@ class ClientParser {
 
 	private void sendLobbyUnReadyRequestAndStartGame(String[] parts) {
 		client.commandQueue.add("LOBUR");
-		ArrayList<String> playerNames = new ArrayList<String>(4);
-		for (int i = 8; i < parts.length; i++) {
+		int numberOfPlayers = Integer.parseInt(parts[1]);
+		ArrayList<String> playerNames = new ArrayList<String>(numberOfPlayers);
+		for (int i = numberOfPlayers + 4; i < parts.length; i++) {
 			playerNames.add(parts[i]);
 		}
+		int[] carIndices = new int[numberOfPlayers];
+		for (int i = 0; i < numberOfPlayers; i++) {
+			carIndices[i] = Integer.parseInt(parts[i + 3]);
+		}
 		client.startGame(
-				Integer.parseInt(parts[1]),
+				numberOfPlayers,
 				Integer.parseInt(parts[2]),
-				new int[] { Integer.parseInt(parts[3]),
-						Integer.parseInt(parts[4]), Integer.parseInt(parts[5]),
-						Integer.parseInt(parts[6]) }, Byte.parseByte(parts[7]),
+				carIndices, Byte.parseByte(parts[numberOfPlayers + 3]),
 				playerNames.toArray(new String[0]));
 	}
 
@@ -668,12 +670,7 @@ class ClientParser {
 						}
 						break;
 					case "int":
-						try {
-							if (Integer.parseInt(parts[i]) < 0) {
-								return false;
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
+						if (!isInt(parts[i])) {
 							return false;
 						}
 						break;
@@ -705,5 +702,17 @@ class ClientParser {
 		} else {
 			return false;
 		}
+	}
+
+	private boolean isInt(String string) {
+		try {
+			if (Integer.parseInt(string) < 0) {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

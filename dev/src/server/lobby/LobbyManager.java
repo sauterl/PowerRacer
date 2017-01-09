@@ -90,7 +90,7 @@ public class LobbyManager {
 				readyCount += 1;
 			}
 		}
-		if (readyCount == lobby.getLobbylist().size() && readyCount == 4) {
+		if (readyCount == lobby.getLobbylist().size()) {
 			return true;
 		} else {
 			return false;
