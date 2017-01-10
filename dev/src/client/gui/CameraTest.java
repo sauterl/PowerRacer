@@ -29,6 +29,12 @@ public class CameraTest {
 			// game.setPause(true);
 			// Thread.sleep(5000);
 			// game.setPause(false);
+//			game.setScoreboard(
+//					new int[] { 11597, 12344, 23323, 34456, 35738, 36127, 40000,
+//							99999 },
+//					new String[] { "Beni", "Marco", "SimeonJackman", "Florian",
+//							"Cake", "Test", "Just4Kicks", "Haxor" });
+//			game.setComplete();
 			while (true) {
 				if (!dummyCommandQueue.isEmpty()) {
 					dummyCommandQueue.clear();
@@ -38,9 +44,6 @@ public class CameraTest {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		// game.setScoreboard("Beni",11597, "Marco",12344,
-		// "SimeonJackman",23323, "Florian",34456);
-		// game.setComplete();
 	}
 
 }
