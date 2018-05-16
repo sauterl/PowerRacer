@@ -49,14 +49,15 @@ public class Inversion extends Powerup {
 		if (timerMax != 0) {
 			// Invert Controls
 			if (timer == 0) {
-				game.invertInputs();
+				game.invertInputs(timerMax);
 			}
 			// Draw purple fog
+			int opacity = (int) (100 * ((timerMax - (double) timer) / ((double) timerMax + 50)) + 100);
 			g.setColor(new Color(
 					147,
 					112,
 					219,
-					(int) (200 * ((double) (timerMax - (double) timer) / ((double) timerMax + 50)))));
+					opacity));
 			g.fillRect(0, 0, Camera.RENDER_WIDTH, Camera.RENDER_HEIGHT);
 		}
 

@@ -298,7 +298,7 @@ class ClientParser {
 					break;
 				case 1:
 					client.clientGUI.addEffect(new Inversion(Client.getGame(),
-							80));
+							50));
 					break;
 				default:
 					break;

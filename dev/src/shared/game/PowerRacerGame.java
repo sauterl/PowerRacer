@@ -585,8 +585,8 @@ public class PowerRacerGame {
 		return cars[carIndex].getSpeed();
 	}
 
-	public void invertInputs() {
-		invertInputs = 160;
+	public void invertInputs(int invertInputs) {
+		this.invertInputs = invertInputs;
 	}
 
 	public int getMaxCheckpoint() {
