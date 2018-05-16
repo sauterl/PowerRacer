@@ -1,0 +1,39 @@
+group 'pitcrew'
+version '2.0'
+
+apply plugin: 'java'
+
+def description = """
+    A 2D top-down racing game.
+"""
+
+//specifies source compatibility to Java 8
+sourceCompatibility = 1.8
+
+//adds maven central as a maven repository
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes 'Main-Class': 'client.gui.ClientGUI'
+    }
+}
+
+task info {
+    doFirst {
+        println "${description}"
+    }
+}
+
+task 'build-all'(dependsOn: [build, javadoc, test]) {
+
+}
