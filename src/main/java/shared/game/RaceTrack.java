@@ -33,9 +33,9 @@ public class RaceTrack {
 	public static String randomString;
 
 	public static final byte RACETRACK_SMALL = 0, RACETRACK_GRASS = 1,
-			RACETRACK_SAND = 2, RACETRACK_ICE = 3, RANDOM = 4, GET_RANDOM = 5;
+			RACETRACK_SAND = 2, RACETRACK_ICE = 3, RANDOM = 4, GET_RANDOM = 6, RACETRACK_DBIS = 5;
 	public static final String[] TRACK_NAMES = { "Small track", "Grass track",
-			"Sand track", "Ice track", "Random" };
+			"Sand track", "Ice track", "Random", "DBIS" };
 
 	public static int numberOfTracks() {
 		return TRACK_NAMES.length;
@@ -70,6 +70,9 @@ public class RaceTrack {
 				break;
 			case GET_RANDOM:
 				loadRandom();
+				break;
+			case RACETRACK_DBIS:
+				loadDBISTest();
 				break;
 			default:
 				System.out
@@ -258,6 +261,19 @@ public class RaceTrack {
 		maxLap = 5;
 	}
 
+	private void loadDBISTest(){
+		tileMap = PresetTracks.DBIS_TEST_TRACK;
+		// Start / Finish Line: 1,20 2,20 3,20 4,20
+		startingPositions = new int[][]{
+				{2,21}, {4,21},
+				{2,23}, {4,23},
+				{2,25}, {4,25}
+		};
+		defaultTile = 0;
+		maxCheckpoint = 6;
+		maxLap = 5;
+	}
+
 	private void loadRandom() {
 		RandomMapGenerator rmg = new RandomMapGenerator(72);
 		tileMap = rmg.getTrack();
@@ -421,6 +437,9 @@ public class RaceTrack {
 			case RANDOM:
 				trackName = "RANDOM";
 				return "Random Track";
+			case RACETRACK_DBIS:
+				trackName = "RACETRACK_DBIS";
+				return "DBIS Test Track";
 			default:
 				System.out
 						.println("ERROR: Track not found!\nReturning Small Track instead.");

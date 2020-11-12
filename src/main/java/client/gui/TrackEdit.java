@@ -18,11 +18,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-
-import shared.game.PresetTracks;
 import shared.game.RaceTrack;
 
 /**
@@ -192,7 +189,7 @@ public class TrackEdit extends Component {
 			if (keyCode == KeyEvent.VK_RIGHT) {
 				x -= magnification * 16;
 			}
-			if (keyCode == KeyEvent.VK_EQUALS) {
+			if (keyCode == KeyEvent.VK_EQUALS || keyCode == KeyEvent.VK_NUMPAD0) {
 				magnification++;
 			}
 			if (keyCode == KeyEvent.VK_MINUS && magnification > 1) {
@@ -312,7 +309,7 @@ public class TrackEdit extends Component {
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int rot = -e.getWheelRotation();
 			if (scroll + rot <= 0) {
-				scroll += rot;
+				scroll += (rot*2);
 			} else {
 				scroll = 0;
 			}
