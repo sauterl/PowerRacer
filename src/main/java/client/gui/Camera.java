@@ -28,7 +28,7 @@ import javax.swing.JFrame;
 
 import shared.game.Car;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 import shared.game.powerup.Collidable;
 import shared.game.powerup.Powerup;
 
@@ -166,7 +166,7 @@ public class Camera extends Component {
 
 	/**
 	 * Paints the game onto the given Graphics. This method first draws the
-	 * {@link RaceTrack}, then the {@link Collidable}s, then the {@link Car}s,
+	 * {@link VisualRaceTrack}, then the {@link Collidable}s, then the {@link Car}s,
 	 * then the {@link Powerup}s in the VFX list and finally the HUD.
 	 * 
 	 * @param g

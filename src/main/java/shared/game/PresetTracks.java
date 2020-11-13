@@ -1,5 +1,8 @@
 package shared.game;
 
+import java.util.Arrays;
+import shared.game.model.RaceTrackModel;
+
 /**
  * Final class containing all preset track byte arrays, so this information does
  * not need to be read from a file each time.
@@ -605,4 +608,79 @@ public final class PresetTracks {
 			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 
+	public static final RaceTrackModel GRASS_MODEL = new RaceTrackModel(
+			"RACETRACK_GRASS",
+			(byte)0,
+			new int[][] { { 9, 3 }, { 9, 2 }, { 9, 1 },
+					{ 8, 3 }, { 8, 2 }, { 8, 1 }, { 7, 3 },
+					{ 7, 2 } },
+			new int[][] { { 16, 9 }, { 17, 9 }, { 18, 9 } },
+			3,5,
+			RACETRACK_GRASS,
+			(byte)1
+	);
+
+	public static final RaceTrackModel SMALL_MODEL = new RaceTrackModel(
+			"RACETRACK_SMALL",
+			(byte)0,
+			new int[][] { { 18, 22 }, { 19, 23 }, { 18, 24 },
+					{ 19, 25 }, { 19, 22 }, { 18, 23 }, { 19, 24 },
+					{ 18, 25 } },
+			new int[][] { { 20, 4 }, { 20, 5 }, { 20, 6 },
+					{ 20, 7 } },
+			3,5,
+			RACETRACK_SMALL,
+			(byte)0
+	);
+
+	public static final RaceTrackModel SAND_MODEL = new RaceTrackModel(
+			"RACETRACK_SAND",
+			(byte)2,
+			new int[][] { { 28, 2 }, { 27, 3 }, { 28, 4 },
+					{ 27, 5 }, { 27, 2 }, { 28, 3 }, { 27, 4 },
+					{ 28, 5 } },
+			new int[][] { { 47, 38 }, { 46, 38 }, { 45, 38 },
+					{ 44, 38 }, { 32, 36 }, { 33, 36 }, { 34, 36 }, { 35, 36 },
+					{ 4, 36 }, { 5, 36 }, { 6, 36 }, { 7, 36 }, { 8, 36 },
+					{ 17, 5 }, { 17, 4 }, { 17, 3 }, { 17, 2 } },
+			6,2,
+			RACETRACK_SAND,
+			(byte)2
+	);
+
+	public static final RaceTrackModel ICE_MODEL = new RaceTrackModel(
+		"RACETRACK_ICE",
+			(byte)23,
+			new int[][] { { 22, 3 }, { 21, 4 }, { 22, 5 },
+					{ 21, 6 }, { 21, 3 }, { 22, 4 }, { 21, 5 },
+					{ 22, 6 } },
+			new int[][] { { 45, 7 }, { 48, 7 }, { 36, 16 },
+					{ 36, 18 }, { 52, 28 }, { 52, 25 }, { 28, 48 }, { 28, 49 },
+					{ 28, 50 }, { 32, 58 }, { 16, 55 }, { 5, 30 }, { 6, 30 },
+					{ 7, 30 }, { 8, 30 } },
+			9,2,
+			RACETRACK_ICE,
+			(byte)3
+	);
+
+	public static final RaceTrackModel DBIS_MODEL = new RaceTrackModel(
+			"DBIS_TEST_TRACK",
+			(byte)0,
+			new int[][]{
+					{2,21}, {4,21},
+					{2,23}, {4,23},
+					{2,25}, {4,25}
+			},null,
+			6,5,
+			DBIS_TEST_TRACK,
+			(byte)5
+	);
+
+	public static final RaceTrackModel RANDOM_MODEL = RaceTrackModel.createRandom(72, (byte)4);
+
+	public static final RaceTrackModel[] PRESET_TRACKS = {SMALL_MODEL, GRASS_MODEL, SAND_MODEL, ICE_MODEL, RANDOM_MODEL, DBIS_MODEL};
+
+	public static RaceTrackModel presetFromId(byte id){
+		return Arrays.stream(PRESET_TRACKS).filter(m -> m.getIdentifier() == id).findFirst().orElse(SMALL_MODEL);
+	}
 }

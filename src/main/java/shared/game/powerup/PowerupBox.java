@@ -3,7 +3,7 @@ package shared.game.powerup;
 import java.util.Random;
 
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Itembox, from which a player can collect {@link Powerup}s.
@@ -21,7 +21,7 @@ public class PowerupBox extends Collidable {
 		setRotation(rand.nextDouble() * 2 * Math.PI);
 		setMoving(false);
 		setID(ID);
-		setImage(RaceTrack.getPowerupImage(2));
+		setImage(VisualRaceTrack.getPowerupImage(2));
 	}
 
 	/**

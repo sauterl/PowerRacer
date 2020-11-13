@@ -2,7 +2,7 @@ package shared.game.powerup;
 
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Oil Slick {@link Powerup}, which spawns an {@link OilSlickCollidable
@@ -15,7 +15,7 @@ public class OilSlickPowerup extends Powerup {
 
 	public OilSlickPowerup(PowerRacerGame game) {
 		super(game, 0);
-		powerupImage = RaceTrack.getPowerupImage(5);
+		powerupImage = VisualRaceTrack.getPowerupImage(5);
 	}
 
 	/**

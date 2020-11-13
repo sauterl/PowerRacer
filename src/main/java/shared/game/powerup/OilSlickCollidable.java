@@ -3,7 +3,7 @@ package shared.game.powerup;
 import java.util.Random;
 
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Collidable setting the speed of a colliding player to 0.
@@ -34,7 +34,7 @@ public class OilSlickCollidable extends Collidable {
 		setMoving(true);
 		setSpeed(0);
 		setID(ID);
-		setImage(RaceTrack.getPowerupImage(6));
+		setImage(VisualRaceTrack.getPowerupImage(6));
 	}
 
 	/**

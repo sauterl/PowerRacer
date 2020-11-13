@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import client.gui.ClientGUI;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 import shared.game.powerup.Inversion;
 import shared.game.powerup.Lightning;
 import shared.protocol.Protocol;
@@ -259,7 +259,7 @@ class ClientParser {
 				case GNRMG:
 					if (checkPacket(parts, 2,
 							new String[] { "String", "String" })) {
-						RaceTrack.randomString = parts[1];
+						VisualRaceTrack.randomString = parts[1];
 					}
 					break;
 				case SKICK:
@@ -496,7 +496,7 @@ class ClientParser {
 	private void setLobbyListToListOfOpenLobbies(String[] parts) {
 		for (int i = 1; i < parts.length; i += 2) {
 			client.clientGUI.addToLobbyList(parts[i],
-					RaceTrack.getTrackName(Byte.parseByte(parts[i + 1])));
+					VisualRaceTrack.getTrackName(Byte.parseByte(parts[i + 1])));
 		}
 	}
 
@@ -514,7 +514,7 @@ class ClientParser {
 
 	private void moveToSpecifiedLobby(String[] parts) {
 		client.clientGUI.moveToLobby(parts[1] + " "
-				+ RaceTrack.getTrackName(Byte.parseByte(parts[2])));
+				+ VisualRaceTrack.getTrackName(Byte.parseByte(parts[2])));
 	}
 
 	private void addLobbyLeaveInformationToChat(String[] parts) {
@@ -529,9 +529,9 @@ class ClientParser {
 
 	private void addCreatedLobbyToLobbyList(String[] parts) {
 		client.clientGUI.addToChat(parts[1] + " has created Lobby " + parts[2]
-				+ " with " + RaceTrack.getTrackName(Byte.parseByte(parts[3])));
+				+ " with " + VisualRaceTrack.getTrackName(Byte.parseByte(parts[3])));
 		client.clientGUI.addToLobbyList(parts[2],
-				RaceTrack.getTrackName(Byte.parseByte(parts[3])));
+				VisualRaceTrack.getTrackName(Byte.parseByte(parts[3])));
 	}
 
 	private void addNameChangeInformationToChat(String[] parts) {

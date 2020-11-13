@@ -1,12 +1,10 @@
 package shared.game;
 
+import client.gui.Camera;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
 import javax.swing.ImageIcon;
-
-import client.gui.Camera;
-import client.gui.RandomMapGenerator;
+import shared.game.model.RaceTrackModel;
 import shared.game.powerup.Collidable;
 import shared.game.powerup.Powerup;
 
@@ -16,87 +14,51 @@ import shared.game.powerup.Powerup;
  * @author Florian
  *
  */
-public class RaceTrack {
+public class VisualRaceTrack {
+
+	private Image[] tiles;
+	private final Image[] carImages = new Image[4 * RaceTrackModel.NUMBER_OF_CARS];
+	private static Image[] powerupImages;
+	private Image checkpointFeedback;
+	private boolean[] solid, transparent;
+	private int[] checkpointNumber;
+	private double[] frictionCoefficients;
+
 	private static String trackName;
-	byte[][] tileMap;
-	private int diffCars = 5; // how many car types exist
-	Image[] tiles, carImages = new Image[4 * diffCars];
-	static Image[] powerupImages;
-	Image checkpointFeedback;
-	boolean[] solid, transparent;
-	int[] checkpointNumber;
-	double[] frictionCoefficients;
-	public int[][] startingPositions, itemBoxPositions = {};
-	int defaultTile;
-	int maxCheckpoint;
-	int maxLap;
+
 	public static String randomString;
 
 	public static final byte RACETRACK_SMALL = 0, RACETRACK_GRASS = 1,
 			RACETRACK_SAND = 2, RACETRACK_ICE = 3, RANDOM = 4, GET_RANDOM = 6, RACETRACK_DBIS = 5;
-	public static final String[] TRACK_NAMES = { "Small track", "Grass track",
-			"Sand track", "Ice track", "Random", "DBIS" };
 
-	public static int numberOfTracks() {
-		return TRACK_NAMES.length;
-	}
+	private RaceTrackModel model;
 
-	/**
-	 * Generates a track object from the track identifier.
-	 * 
-	 * @param track
-	 *            the track identifier corresponding with the chosen track
-	 */
-	public RaceTrack(byte track) {
+	public VisualRaceTrack(RaceTrackModel model){
 		loadTiles();
 		loadCarImages();
 		loadOtherImages();
-
-		switch (track) {
-			case RACETRACK_SMALL:
-				loadSmall();
-				break;
-			case RACETRACK_GRASS:
-				loadGrass();
-				break;
-			case RACETRACK_SAND:
-				loadSand();
-				break;
-			case RACETRACK_ICE:
-				loadIce();
-				break;
-			case RANDOM:
-				loadGetRandom();
-				break;
-			case GET_RANDOM:
-				loadRandom();
-				break;
-			case RACETRACK_DBIS:
-				loadDBISTest();
-				break;
-			default:
-				System.out
-						.println("ERROR: Track not found!\nLoading Small Track instead...");
-				loadSmall();
-				break;
-
+		if(model == null){
+			System.err.println("Cannot load model null. Using small instead");
+			model = PresetTracks.SMALL_MODEL;
 		}
+		this.model = model;
 	}
+
 
 	public static ImageIcon[] getCarImageArray() {
 		ImageIcon[] carII = new ImageIcon[5];
 		carII[0] = scaleImageIcon(new ImageIcon(
-				RaceTrack.class.getResource("/images/car1Red.png")));
+				VisualRaceTrack.class.getResource("/images/car1Red.png")));
 		carII[1] = scaleImageIcon(new ImageIcon(
-				RaceTrack.class.getResource("/images/car2Blue.png")));
+				VisualRaceTrack.class.getResource("/images/car2Blue.png")));
 		carII[2] = scaleImageIcon(new ImageIcon(
-				RaceTrack.class
+				VisualRaceTrack.class
 						.getResource("/images/car3Green.png")));
 		carII[3] = scaleImageIcon(new ImageIcon(
-				RaceTrack.class
+				VisualRaceTrack.class
 						.getResource("/images/car4Yellow.png")));
 		carII[4] = scaleImageIcon(new ImageIcon(
-				RaceTrack.class.getResource("/images/car5Red.png")));
+				VisualRaceTrack.class.getResource("/images/car5Red.png")));
 		return carII;
 	}
 
@@ -141,7 +103,7 @@ public class RaceTrack {
 		// of arrays
 		String[] carColors = { "Red", "Blue", "Green", "Yellow" };
 		int length = carColors.length;
-		for (int j = 1; j <= diffCars; j++) { // j is the amount of different
+		for (int j = 1; j <= RaceTrackModel.NUMBER_OF_CARS; j++) { // j is the amount of different
 											  // car types
 			// existent
 			for (int i = 0; i < carColors.length; i++) {
@@ -210,8 +172,9 @@ public class RaceTrack {
 		}
 	}
 
+	@Deprecated
 	private void loadIce() {
-		tileMap = PresetTracks.RACETRACK_ICE;
+		/*tileMap = PresetTracks.RACETRACK_ICE;
 		startingPositions = new int[][] { { 22, 3 }, { 21, 4 }, { 22, 5 },
 				{ 21, 6 }, { 21, 3 }, { 22, 4 }, { 21, 5 },
 				{ 22, 6 } };
@@ -221,11 +184,12 @@ public class RaceTrack {
 				{ 7, 30 }, { 8, 30 } };
 		defaultTile = 23;
 		maxCheckpoint = 9;
-		maxLap = 2;
+		maxLap = 2;*/
 	}
 
+	@Deprecated
 	private void loadSand() {
-		tileMap = PresetTracks.RACETRACK_SAND;
+		/*tileMap = PresetTracks.RACETRACK_SAND;
 		startingPositions = new int[][] { { 28, 2 }, { 27, 3 }, { 28, 4 },
 				{ 27, 5 }, { 27, 2 }, { 28, 3 }, { 27, 4 },
 				{ 28, 5 } };
@@ -235,22 +199,24 @@ public class RaceTrack {
 				{ 17, 5 }, { 17, 4 }, { 17, 3 }, { 17, 2 } };
 		defaultTile = 2;
 		maxCheckpoint = 6;
-		maxLap = 2;
+		maxLap = 2;*/
 	}
 
+	@Deprecated
 	private void loadGrass() {
-		tileMap = PresetTracks.RACETRACK_GRASS;
+		/*tileMap = PresetTracks.RACETRACK_GRASS;
 		startingPositions = new int[][] { { 9, 3 }, { 9, 2 }, { 9, 1 },
 				{ 8, 3 }, { 8, 2 }, { 8, 1 }, { 7, 3 },
 				{ 7, 2 } };
 		itemBoxPositions = new int[][] { { 16, 9 }, { 17, 9 }, { 18, 9 } };
 		defaultTile = 0;
 		maxCheckpoint = 3;
-		maxLap = 5;
+		maxLap = 5;*/
 	}
 
+	@Deprecated
 	private void loadSmall() {
-		tileMap = PresetTracks.RACETRACK_SMALL;
+		/*tileMap = PresetTracks.RACETRACK_SMALL;
 		startingPositions = new int[][] { { 18, 22 }, { 19, 23 }, { 18, 24 },
 				{ 19, 25 }, { 19, 22 }, { 18, 23 }, { 19, 24 },
 				{ 18, 25 } };
@@ -258,11 +224,12 @@ public class RaceTrack {
 				{ 20, 7 } };
 		defaultTile = 0;
 		maxCheckpoint = 3;
-		maxLap = 5;
+		maxLap = 5;*/
 	}
 
+	@Deprecated
 	private void loadDBISTest(){
-		tileMap = PresetTracks.DBIS_TEST_TRACK;
+		/*tileMap = PresetTracks.DBIS_TEST_TRACK;
 		// Start / Finish Line: 1,20 2,20 3,20 4,20
 		startingPositions = new int[][]{
 				{2,21}, {4,21},
@@ -271,29 +238,31 @@ public class RaceTrack {
 		};
 		defaultTile = 0;
 		maxCheckpoint = 6;
-		maxLap = 5;
+		maxLap = 5;*/
 	}
 
+	@Deprecated
 	private void loadRandom() {
-		RandomMapGenerator rmg = new RandomMapGenerator(72);
+		/*RandomMapGenerator rmg = new RandomMapGenerator(72);
 		tileMap = rmg.getTrack();
 		startingPositions = rmg.getStartingPositions();
 		itemBoxPositions = rmg.getItemPositions();
 		// System.out.println(itemBoxPositions.length);
 		defaultTile = 0;
 		maxCheckpoint = rmg.getCheckpoints();
-		maxLap = 3;
+		maxLap = 3;*/
 	}
 
+	@Deprecated
 	private void loadGetRandom() {
-		tileMap = RandomMapGenerator.stringToTrack(randomString);
+		/*tileMap = RandomMapGenerator.stringToTrack(randomString);
 		startingPositions = RandomMapGenerator
 				.stringToStartingPositions(randomString);
 		itemBoxPositions = RandomMapGenerator
 				.stringToItemPositions(randomString);
 		maxCheckpoint = RandomMapGenerator.stringToCheckpoints(randomString);
 		maxLap = 3;
-		defaultTile = 0;
+		defaultTile = 0;*/
 	}
 
 	public Image getCarImage(int carIndex) {
@@ -305,23 +274,23 @@ public class RaceTrack {
 	}
 
 	public Image getTile(int x, int y) {
-		return getTileImage(tileMap[x][y]);
+		return getTileImage(model.getMap()[x][y]);
 	}
 
 	public boolean getSolid(int x, int y) {
-		return solid[tileMap[x][y]];
+		return solid[model.getMap()[x][y]];
 	}
 
 	public boolean getTransparent(int x, int y) {
-		return transparent[tileMap[x][y]];
+		return transparent[model.getMap()[x][y]];
 	}
 
 	public int getCheckpointNumber(int x, int y) {
-		return checkpointNumber[tileMap[x][y]];
+		return checkpointNumber[model.getMap()[x][y]];
 	}
 
 	public double getfrictionCoefficient(int x, int y) {
-		return frictionCoefficients[tileMap[x][y]];
+		return frictionCoefficients[model.getMap()[x][y]];
 	}
 
 	public int numberOfTiles() {
@@ -329,47 +298,47 @@ public class RaceTrack {
 	}
 
 	public int getStartingPositionX(int carIndex) {
-		return startingPositions[carIndex][0];
+		return model.getStartingPositions()[carIndex][0];
 	}
 
 	public int getStartingPositionY(int carIndex) {
-		return startingPositions[carIndex][1];
+		return model.getStartingPositions()[carIndex][1];
 	}
 
 	public Image getDefaultTile() {
-		return tiles[defaultTile];
+		return tiles[model.getDefaultTile()];
 	}
 
 	public double getDefaultTileFriction() {
-		return frictionCoefficients[defaultTile];
+		return frictionCoefficients[model.getDefaultTile()];
 	}
 
 	public int getTrackWidth() {
-		return tileMap.length;
+		return model.getMap().length;
 	}
 
 	public int getTrackHeight() {
-		return tileMap[0].length;
+		return model.getMap()[0].length;
 	}
 
 	public int getMaxCheckpoint() {
-		return maxCheckpoint;
+		return model.getNumbersOfCheckpoints();
 	}
 
 	public int getMaxLap() {
-		return maxLap;
+		return model.getNumberOfLaps();
 	}
 
 	public int numberOfItemBoxes() {
-		return itemBoxPositions.length;
+		return model.getItemBoxPositions().length;
 	}
 
 	public int getItemBoxPositionX(int itemBoxID) {
-		return itemBoxPositions[itemBoxID][0];
+		return model.getItemBoxPositions()[itemBoxID][0];
 	}
 
 	public int getItemBoxPositionY(int itemBoxID) {
-		return itemBoxPositions[itemBoxID][1];
+		return model.getItemBoxPositions()[itemBoxID][1];
 	}
 
 	/**

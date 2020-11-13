@@ -3,7 +3,7 @@ package shared.game.powerup;
 import java.awt.Graphics;
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Boost {@link Powerup}, which increases the car speed to a predetermined
@@ -23,7 +23,7 @@ public class Boost extends Powerup {
 	 */
 	public Boost(PowerRacerGame game) {
 		super(game, 40);
-		powerupImage = RaceTrack.getPowerupImage(1);
+		powerupImage = VisualRaceTrack.getPowerupImage(1);
 	}
 
 	/**

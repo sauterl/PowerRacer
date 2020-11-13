@@ -2,7 +2,7 @@ package shared.game.powerup;
 
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * The {@link Powerup} spawning five {@link RocketCollidable}s when used.
@@ -14,7 +14,7 @@ public class RocketPowerup extends Powerup {
 
 	public RocketPowerup(PowerRacerGame game) {
 		super(game, 0);
-		powerupImage = RaceTrack.getPowerupImage(3);
+		powerupImage = VisualRaceTrack.getPowerupImage(3);
 	}
 
 	/**

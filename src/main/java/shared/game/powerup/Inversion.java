@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Inversion {@link Powerup}, which inverts game controls for other players.
@@ -26,7 +26,7 @@ public class Inversion extends Powerup {
 	 */
 	public Inversion(PowerRacerGame game, int timerMax) {
 		super(game, timerMax);
-		powerupImage = RaceTrack.getPowerupImage(8);
+		powerupImage = VisualRaceTrack.getPowerupImage(8);
 	}
 
 	/**

@@ -20,7 +20,8 @@ import java.util.Date;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import shared.game.RaceTrack;
+import shared.game.PresetTracks;
+import shared.game.VisualRaceTrack;
 
 /**
  * @author Florian
@@ -34,7 +35,7 @@ public class TrackEdit extends Component {
 	private static final long serialVersionUID = 1L;
 
 	JFrame frame;
-	RaceTrack track;
+	VisualRaceTrack track;
 	int x, y, scroll, select, magnification, mx, my, targetX, targetY,
 			defaultTile;
 	byte[][] tileMap;
@@ -83,7 +84,7 @@ public class TrackEdit extends Component {
 		this.addMouseListener(new ML());
 		this.addMouseWheelListener(new MWL());
 
-		track = new RaceTrack(RaceTrack.RACETRACK_SMALL);
+		track = new VisualRaceTrack(PresetTracks.SMALL_MODEL);
 
 		tileMap = new byte[width][height];
 		magnification = 2;
@@ -111,7 +112,7 @@ public class TrackEdit extends Component {
 		frame.addKeyListener(new AL());
 		this.addMouseListener(new ML());
 		this.addMouseWheelListener(new MWL());
-		track = new RaceTrack(RaceTrack.RACETRACK_SMALL);
+		track = new VisualRaceTrack(PresetTracks.SMALL_MODEL);
 		tileMap = new byte[width][height];
 		magnification = 1;
 		tileMap = testMap;

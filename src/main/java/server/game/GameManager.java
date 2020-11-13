@@ -11,7 +11,6 @@ import server.lobby.Lobby;
 import server.lobby.PlayerManager;
 import server.lobby.ServerGUI;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
 
 /**
  * Handles the gamelist by adding and removing games.

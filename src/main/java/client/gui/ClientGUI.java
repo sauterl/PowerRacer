@@ -1,5 +1,6 @@
 package client.gui;
 
+import client.lobby.Client;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -9,9 +10,9 @@ import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,15 +29,15 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import client.lobby.Client;
 import server.discovery.DiscoveryClient;
 import server.discovery.DiscoveryServer;
 import server.lobby.CreateServer;
 import server.lobby.ServerGUI;
 import shared.game.Car;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.PresetTracks;
+import shared.game.VisualRaceTrack;
+import shared.game.model.RaceTrackModel;
 import shared.game.powerup.Powerup;
 
 /**
@@ -582,10 +583,11 @@ public class ClientGUI {
 		joinButton.setEnabled(false);
 
 		JLabel selectTrack = new JLabel("Select Track:");
-		trackSelect = RaceTrack.RACETRACK_SMALL;
+		trackSelect = VisualRaceTrack.RACETRACK_SMALL;
 		JComboBox<String> trackSelection = new JComboBox<String>(
-				RaceTrack.TRACK_NAMES);
-		trackSelection.setSelectedItem(RaceTrack.RACETRACK_SMALL);
+				Arrays.stream(PresetTracks.PRESET_TRACKS).map(RaceTrackModel::getTrackName)
+						.toArray(String[]::new));
+		trackSelection.setSelectedItem(VisualRaceTrack.RACETRACK_SMALL);
 		trackSelection.setMaximumSize(logOutButton.getSize());
 
 		trackSelection.addActionListener(new ActionListener() {
@@ -804,7 +806,7 @@ public class ClientGUI {
 		JLabel selectCar = new JLabel("Select Car:");
 		JLabel selectedCar = new JLabel(Car.CAR_NAMES[Car.RACER]);
 		carSelect = Car.RACER;
-		carSelection = new JComboBox<ImageIcon>(RaceTrack.getCarImageArray());
+		carSelection = new JComboBox<ImageIcon>(VisualRaceTrack.getCarImageArray());
 		carSelection.setSelectedItem(Car.RACER);
 
 		carSelection.setMaximumSize(new Dimension(Camera.TILE_SIDE_LENGTH,

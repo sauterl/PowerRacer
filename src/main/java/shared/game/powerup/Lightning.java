@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Lightning {@link Powerup} reducing speed by half and reducing visibility.
@@ -27,7 +27,7 @@ public class Lightning extends Powerup {
 	 */
 	public Lightning(PowerRacerGame game, int timerMax) {
 		super(game, timerMax);
-		powerupImage = RaceTrack.getPowerupImage(7);
+		powerupImage = VisualRaceTrack.getPowerupImage(7);
 	}
 
 	/**

@@ -22,7 +22,7 @@ import client.gui.Camera;
 public class PowerRacerGame {
 
 	Car[] cars;
-	public RaceTrack track;
+	public VisualRaceTrack track;
 	int carIndex, countdown = -40;
 	ConcurrentLinkedQueue<String> commandQueue;
 	private boolean control, complete, botOn, pause;
@@ -61,7 +61,7 @@ public class PowerRacerGame {
 		this.carIndex = carIndex;
 		this.commandQueue = commandQueue;
 
-		track = new RaceTrack(trackIdentifier);
+		track = new VisualRaceTrack(PresetTracks.presetFromId(trackIdentifier));
 
 		cars = new Car[numberOfPlayers];
 		for (int i = 0; i < cars.length; i++) {
@@ -455,7 +455,7 @@ public class PowerRacerGame {
 	}
 
 	public String getTrackName() {
-		return RaceTrack.getTrackName(trackIdentifier);
+		return VisualRaceTrack.getTrackName(trackIdentifier);
 	}
 
 	public void setNumberOfPlayers(int numberOfPlayers) {
@@ -474,7 +474,7 @@ public class PowerRacerGame {
 		try {
 			return cars[carIndex].getPowerup().getPowerupImage();
 		} catch (NullPointerException e) {
-			return RaceTrack.getPowerupImage(0);
+			return VisualRaceTrack.getPowerupImage(0);
 		}
 	}
 

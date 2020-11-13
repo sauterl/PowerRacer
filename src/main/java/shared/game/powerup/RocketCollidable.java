@@ -2,7 +2,7 @@ package shared.game.powerup;
 
 import client.gui.Camera;
 import shared.game.PowerRacerGame;
-import shared.game.RaceTrack;
+import shared.game.VisualRaceTrack;
 
 /**
  * Rocket {@link Collidable} reducing a colliding Car's speed to 0.
@@ -21,7 +21,7 @@ public class RocketCollidable extends Collidable {
 		setMoving(true);
 		setSpeed(Camera.TILE_SIDE_LENGTH / 2);
 		setID(ID);
-		setImage(RaceTrack.getPowerupImage(4));
+		setImage(VisualRaceTrack.getPowerupImage(4));
 	}
 
 	/**
