@@ -2,7 +2,7 @@ package server.lobby;
 
 import server.data.DataLogic;
 import server.game.GameLogic;
-import shared.game.PresetTracks;
+import shared.io.EntityManager;
 import shared.protocol.Protocol;
 
 /**
@@ -141,7 +141,7 @@ public class Parser {
 					break;
 				case LOBCR:
 					if (checkPacket(parts, 2, new String[] { "string", "byte" })) {
-						if (Byte.parseByte(parts[1]) < PresetTracks.PRESET_TRACKS.length) {
+						if (Byte.parseByte(parts[1]) < EntityManager.getInstance().numberOfTracks()) {
 							LobbyLogic.createNewLobby(this.player, parts[1]);
 						} else {
 							ServerGUI

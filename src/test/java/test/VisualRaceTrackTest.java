@@ -6,26 +6,27 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import client.gui.RandomMapGenerator;
-import shared.game.RaceTrack;
+import shared.game.PresetTracks;
+import shared.game.VisualRaceTrack;
 
-public class RaceTrackTest {
+public class VisualRaceTrackTest {
 
-	static RaceTrack[] tracks;
+	static VisualRaceTrack[] tracks;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		RaceTrack.randomString = RandomMapGenerator
+		VisualRaceTrack.randomString = RandomMapGenerator
 				.trackToString(new RandomMapGenerator(64));
 
-		tracks = new RaceTrack[RaceTrack.TRACK_NAMES.length];
-		for (byte b = 0; b < RaceTrack.TRACK_NAMES.length; b++) {
-			tracks[b] = new RaceTrack(b);
+		tracks = new VisualRaceTrack[PresetTracks.PRESET_TRACKS.length];
+		for (byte b = 0; b < tracks.length; b++) {
+			tracks[b] = new VisualRaceTrack(PresetTracks.presetFromId(b));
 		}
 	}
 
 	@Test
 	public void testGetCarImage() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int i = 0; i < 20; i++) {
 				assertNotNull("Car Image is null!", track.getCarImage(i));
 			}
@@ -34,7 +35,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetTileImage() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int i = 0; i < track.numberOfTiles(); i++) {
 				assertNotNull("Tile Image " + i + " is null!",
 						track.getTileImage(i));
@@ -44,7 +45,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetTile() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int x = 0; x < track.getTrackWidth(); x++) {
 				for (int y = 0; y < track.getTrackHeight(); y++) {
 					assertNotNull("Tile " + x + " " + y + " is null!",
@@ -56,7 +57,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetSolid() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int x = 0; x < track.getTrackWidth(); x++) {
 				for (int y = 0; y < track.getTrackHeight(); y++) {
 					try {
@@ -71,7 +72,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetTransparent() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int x = 0; x < track.getTrackWidth(); x++) {
 				for (int y = 0; y < track.getTrackHeight(); y++) {
 					try {
@@ -87,7 +88,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetCheckpointNumber() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int x = 0; x < track.getTrackWidth(); x++) {
 				for (int y = 0; y < track.getTrackHeight(); y++) {
 					try {
@@ -103,7 +104,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetfrictionCoefficient() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			for (int x = 0; x < track.getTrackWidth(); x++) {
 				for (int y = 0; y < track.getTrackHeight(); y++) {
 					try {
@@ -120,7 +121,7 @@ public class RaceTrackTest {
 	@Test
 	public void testGetStartingPositions() {
 		try {
-			for (RaceTrack track : tracks) {
+			for (VisualRaceTrack track : tracks) {
 				for (int i = 0; i < 4; i++) {
 					track.getStartingPositionX(i);
 					track.getStartingPositionY(i);
@@ -133,7 +134,7 @@ public class RaceTrackTest {
 
 	@Test
 	public void testGetDefaultTile() {
-		for (RaceTrack track : tracks) {
+		for (VisualRaceTrack track : tracks) {
 			assertNotNull("Default tile Image is null!", track.getDefaultTile());
 		}
 	}
@@ -141,7 +142,7 @@ public class RaceTrackTest {
 	@Test
 	public void testGetDefaultTileFriction() {
 		try {
-			for (RaceTrack track : tracks) {
+			for (VisualRaceTrack track : tracks) {
 				track.getDefaultTile();
 			}
 		} catch (Exception e) {

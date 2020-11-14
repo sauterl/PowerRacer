@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.GroupLayout;
@@ -35,10 +34,9 @@ import server.lobby.CreateServer;
 import server.lobby.ServerGUI;
 import shared.game.Car;
 import shared.game.PowerRacerGame;
-import shared.game.PresetTracks;
 import shared.game.VisualRaceTrack;
-import shared.game.model.RaceTrackModel;
 import shared.game.powerup.Powerup;
+import shared.io.EntityManager;
 
 /**
  * Main GUI class, which is also run to start the game.
@@ -317,6 +315,9 @@ public class ClientGUI {
 	 * select screen.
 	 */
 	public ClientGUI() {
+		// FIXME this is just a random place to get suff loaded early on
+		EntityManager.getInstance().loadTracks();
+
 		// create frame
 		frame = new JFrame("Client");
 
@@ -585,8 +586,7 @@ public class ClientGUI {
 		JLabel selectTrack = new JLabel("Select Track:");
 		trackSelect = VisualRaceTrack.RACETRACK_SMALL;
 		JComboBox<String> trackSelection = new JComboBox<String>(
-				Arrays.stream(PresetTracks.PRESET_TRACKS).map(RaceTrackModel::getTrackName)
-						.toArray(String[]::new));
+				EntityManager.getInstance().trackNames().toArray(new String[0]));
 		trackSelection.setSelectedItem(VisualRaceTrack.RACETRACK_SMALL);
 		trackSelection.setMaximumSize(logOutButton.getSize());
 

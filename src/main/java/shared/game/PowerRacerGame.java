@@ -11,6 +11,7 @@ import shared.game.powerup.Powerup;
 import shared.game.powerup.PowerupBox;
 import shared.game.powerup.RocketCollidable;
 import client.gui.Camera;
+import shared.io.EntityManager;
 
 /**
  * The Game object responsible for updating information and sending it to the
@@ -61,7 +62,7 @@ public class PowerRacerGame {
 		this.carIndex = carIndex;
 		this.commandQueue = commandQueue;
 
-		track = new VisualRaceTrack(PresetTracks.presetFromId(trackIdentifier));
+		track = new VisualRaceTrack(EntityManager.getInstance().getFromId(trackIdentifier));
 
 		cars = new Car[numberOfPlayers];
 		for (int i = 0; i < cars.length; i++) {

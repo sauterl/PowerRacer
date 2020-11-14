@@ -673,12 +673,12 @@ public final class PresetTracks {
 			},null,
 			6,5,
 			DBIS_TEST_TRACK,
-			(byte)5
+			(byte)4
 	);
 
-	public static final RaceTrackModel RANDOM_MODEL = RaceTrackModel.createRandom(72, (byte)4);
+	public static final RaceTrackModel RANDOM_MODEL = RaceTrackModel.createRandom(72, (byte)5);
 
-	public static final RaceTrackModel[] PRESET_TRACKS = {SMALL_MODEL, GRASS_MODEL, SAND_MODEL, ICE_MODEL, RANDOM_MODEL, DBIS_MODEL};
+	public static final RaceTrackModel[] PRESET_TRACKS = {SMALL_MODEL, GRASS_MODEL, SAND_MODEL, ICE_MODEL, DBIS_MODEL, RANDOM_MODEL};
 
 	public static RaceTrackModel presetFromId(byte id){
 		return Arrays.stream(PRESET_TRACKS).filter(m -> m.getIdentifier() == id).findFirst().orElse(SMALL_MODEL);

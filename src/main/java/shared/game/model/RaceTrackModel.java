@@ -1,6 +1,7 @@
 package shared.game.model;
 
 import client.gui.RandomMapGenerator;
+import java.util.Arrays;
 
 /**
  * Abstract representation of a racetrack.
@@ -63,6 +64,7 @@ public class RaceTrackModel {
     return m;
   }
 
+
   /**
    * Creates a random model based on a seed
    * @param seed
@@ -92,6 +94,14 @@ public class RaceTrackModel {
         rmg.getStartingPositions(),
         rmg.getItemPositions(),
         rmg.getCheckpoints(),3,rmg.getTrack());
+  }
+
+
+  /**
+   * Jackson/ Databind required default constructor
+   */
+  public RaceTrackModel(){
+
   }
 
   public RaceTrackModel(String trackName, byte defaultTile, int[][] startingPositions,
@@ -132,6 +142,9 @@ public class RaceTrackModel {
   }
 
   public int[][] getItemBoxPositions() {
+    if(itemBoxPositions == null){
+      itemBoxPositions = new int[][]{};
+    }
     return itemBoxPositions;
   }
 
@@ -189,5 +202,53 @@ public class RaceTrackModel {
 
   public void setMap(byte[][] map) {
     this.map = map;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    RaceTrackModel that = (RaceTrackModel) o;
+
+    if (getDefaultTile() != that.getDefaultTile()) {
+      return false;
+    }
+    if (getNumbersOfCheckpoints() != that.getNumbersOfCheckpoints()) {
+      return false;
+    }
+    if (getNumberOfLaps() != that.getNumberOfLaps()) {
+      return false;
+    }
+    if (getIdentifier() != that.getIdentifier()) {
+      return false;
+    }
+    if (!getTrackName().equals(that.getTrackName())) {
+      return false;
+    }
+    if (!Arrays.deepEquals(getStartingPositions(), that.getStartingPositions())) {
+      return false;
+    }
+    if (!Arrays.deepEquals(getItemBoxPositions(), that.getItemBoxPositions())) {
+      return false;
+    }
+    return Arrays.deepEquals(getMap(), that.getMap());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = getTrackName().hashCode();
+    result = 31 * result + (int) getDefaultTile();
+    result = 31 * result + Arrays.deepHashCode(getStartingPositions());
+    result = 31 * result + Arrays.deepHashCode(getItemBoxPositions());
+    result = 31 * result + getNumbersOfCheckpoints();
+    result = 31 * result + getNumberOfLaps();
+    result = 31 * result + Arrays.deepHashCode(getMap());
+    result = 31 * result + (int) getIdentifier();
+    return result;
   }
 }
