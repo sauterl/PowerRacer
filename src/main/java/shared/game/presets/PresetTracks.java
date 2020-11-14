@@ -1,4 +1,4 @@
-package shared.game;
+package shared.game.presets;
 
 import java.util.Arrays;
 import shared.game.model.RaceTrackModel;

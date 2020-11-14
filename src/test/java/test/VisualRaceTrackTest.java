@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import client.gui.RandomMapGenerator;
-import shared.game.PresetTracks;
+import shared.game.presets.PresetTracks;
 import shared.game.VisualRaceTrack;
 
 public class VisualRaceTrackTest {

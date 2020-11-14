@@ -2,7 +2,7 @@ package client.gui;
 
 import java.util.Random;
 
-import shared.game.PresetTracks;
+import shared.game.presets.PresetTracks;
 
 /**
  * @author Simeon

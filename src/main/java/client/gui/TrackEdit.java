@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import shared.game.PresetTracks;
+import shared.game.presets.PresetTracks;
 import shared.game.VisualRaceTrack;
 
 /**

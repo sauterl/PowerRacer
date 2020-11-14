@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import shared.game.model.RaceTrackModel;
 import shared.game.powerup.Collidable;
 import shared.game.powerup.Powerup;
+import shared.game.presets.PresetTiles;
+import shared.game.presets.PresetTracks;
 
 /**
  * The Class keeping track of the games playing field.
@@ -125,145 +127,23 @@ public class VisualRaceTrack {
 	 */
 	private void loadTiles() {
 		ImageIcon fetch;
-		Tile[] defineTiles = { new Tile("grass", false, 0, 0.1, false),
-				new Tile("asphalt", false, 0, 0.05, false),
-				new Tile("sand", false, 0, 0.15, false),
-				new Tile("snow", false, 0, 0.125, false),
-				new Tile("checkpointOne", false, 1, 0.05, false),
-				new Tile("checkpointTwo", false, 2, 0.05, false),
-				new Tile("checkpointThree", false, 3, 0.05, false),
-				new Tile("finishLine", false, 99, 0.05, false),
-				new Tile("checkpointFour", false, 4, 0.05, false),
-				new Tile("checkpointFive", false, 5, 0.05, false),
-				new Tile("checkpointSix", false, 6, 0.05, false),
-				new Tile("checkpointSeven", false, 7, 0.05, false),
-				new Tile("checkpointEight", false, 8, 0.05, false),
-				new Tile("checkpointNine", false, 9, 0.05, false),
-				new Tile("checkpointTen", false, 10, 0.05, false),
-				new Tile("asphaltUp", false, 0, 0.05, false),
-				new Tile("asphaltDown", false, 0, 0.05, false),
-				new Tile("asphaltLeft", false, 0, 0.05, false),
-				new Tile("asphaltRight", false, 0, 0.05, false),
-				new Tile("asphaltUpRight", false, 0, 0.05, true),
-				new Tile("asphaltUpLeft", false, 0, 0.05, true),
-				new Tile("asphaltDownRight", false, 0, 0.05, true),
-				new Tile("asphaltDownLeft", false, 0, 0.05, true),
-				new Tile("ice", false, 0, 0.125, false),
-				new Tile("asphalticeOne", false, 0, 0.055, true),
-				new Tile("asphalticeTwo", false, 0, 0.055, true),
-				new Tile("asphalticeThree", false, 0, 0.055, true),
-				new Tile("asphalticeFour", false, 0, 0.055, true),
-				new Tile("BoostTile", false, 0, -0.05, false) };
-
-		tiles = new Image[defineTiles.length];
-		solid = new boolean[defineTiles.length];
-		checkpointNumber = new int[defineTiles.length];
-		frictionCoefficients = new double[defineTiles.length];
-		transparent = new boolean[defineTiles.length];
-		for (int i = 0; i < defineTiles.length; i++) {
+		tiles = new Image[PresetTiles.TILES.length];
+		solid = new boolean[PresetTiles.TILES.length];
+		checkpointNumber = new int[PresetTiles.TILES.length];
+		frictionCoefficients = new double[PresetTiles.TILES.length];
+		transparent = new boolean[PresetTiles.TILES.length];
+		for (int i = 0; i < PresetTiles.TILES.length; i++) {
 			fetch = new ImageIcon(getClass().getResource(
-					"/images/" + defineTiles[i].getFileName()
+					"/images/" + PresetTiles.TILES[i].getFileName()
 							+ ".png"));
 			tiles[i] = fetch.getImage();
-			solid[i] = defineTiles[i].getSolid();
-			checkpointNumber[i] = defineTiles[i].getCheckpointNumber();
-			frictionCoefficients[i] = defineTiles[i].getFrictionCoefficient();
-			transparent[i] = defineTiles[i].getTransparent();
+			solid[i] = PresetTiles.TILES[i].getSolid();
+			checkpointNumber[i] = PresetTiles.TILES[i].getCheckpointNumber();
+			frictionCoefficients[i] = PresetTiles.TILES[i].getFrictionCoefficient();
+			transparent[i] = PresetTiles.TILES[i].getTransparent();
 		}
 	}
 
-	@Deprecated
-	private void loadIce() {
-		/*tileMap = PresetTracks.RACETRACK_ICE;
-		startingPositions = new int[][] { { 22, 3 }, { 21, 4 }, { 22, 5 },
-				{ 21, 6 }, { 21, 3 }, { 22, 4 }, { 21, 5 },
-				{ 22, 6 } };
-		itemBoxPositions = new int[][] { { 45, 7 }, { 48, 7 }, { 36, 16 },
-				{ 36, 18 }, { 52, 28 }, { 52, 25 }, { 28, 48 }, { 28, 49 },
-				{ 28, 50 }, { 32, 58 }, { 16, 55 }, { 5, 30 }, { 6, 30 },
-				{ 7, 30 }, { 8, 30 } };
-		defaultTile = 23;
-		maxCheckpoint = 9;
-		maxLap = 2;*/
-	}
-
-	@Deprecated
-	private void loadSand() {
-		/*tileMap = PresetTracks.RACETRACK_SAND;
-		startingPositions = new int[][] { { 28, 2 }, { 27, 3 }, { 28, 4 },
-				{ 27, 5 }, { 27, 2 }, { 28, 3 }, { 27, 4 },
-				{ 28, 5 } };
-		itemBoxPositions = new int[][] { { 47, 38 }, { 46, 38 }, { 45, 38 },
-				{ 44, 38 }, { 32, 36 }, { 33, 36 }, { 34, 36 }, { 35, 36 },
-				{ 4, 36 }, { 5, 36 }, { 6, 36 }, { 7, 36 }, { 8, 36 },
-				{ 17, 5 }, { 17, 4 }, { 17, 3 }, { 17, 2 } };
-		defaultTile = 2;
-		maxCheckpoint = 6;
-		maxLap = 2;*/
-	}
-
-	@Deprecated
-	private void loadGrass() {
-		/*tileMap = PresetTracks.RACETRACK_GRASS;
-		startingPositions = new int[][] { { 9, 3 }, { 9, 2 }, { 9, 1 },
-				{ 8, 3 }, { 8, 2 }, { 8, 1 }, { 7, 3 },
-				{ 7, 2 } };
-		itemBoxPositions = new int[][] { { 16, 9 }, { 17, 9 }, { 18, 9 } };
-		defaultTile = 0;
-		maxCheckpoint = 3;
-		maxLap = 5;*/
-	}
-
-	@Deprecated
-	private void loadSmall() {
-		/*tileMap = PresetTracks.RACETRACK_SMALL;
-		startingPositions = new int[][] { { 18, 22 }, { 19, 23 }, { 18, 24 },
-				{ 19, 25 }, { 19, 22 }, { 18, 23 }, { 19, 24 },
-				{ 18, 25 } };
-		itemBoxPositions = new int[][] { { 20, 4 }, { 20, 5 }, { 20, 6 },
-				{ 20, 7 } };
-		defaultTile = 0;
-		maxCheckpoint = 3;
-		maxLap = 5;*/
-	}
-
-	@Deprecated
-	private void loadDBISTest(){
-		/*tileMap = PresetTracks.DBIS_TEST_TRACK;
-		// Start / Finish Line: 1,20 2,20 3,20 4,20
-		startingPositions = new int[][]{
-				{2,21}, {4,21},
-				{2,23}, {4,23},
-				{2,25}, {4,25}
-		};
-		defaultTile = 0;
-		maxCheckpoint = 6;
-		maxLap = 5;*/
-	}
-
-	@Deprecated
-	private void loadRandom() {
-		/*RandomMapGenerator rmg = new RandomMapGenerator(72);
-		tileMap = rmg.getTrack();
-		startingPositions = rmg.getStartingPositions();
-		itemBoxPositions = rmg.getItemPositions();
-		// System.out.println(itemBoxPositions.length);
-		defaultTile = 0;
-		maxCheckpoint = rmg.getCheckpoints();
-		maxLap = 3;*/
-	}
-
-	@Deprecated
-	private void loadGetRandom() {
-		/*tileMap = RandomMapGenerator.stringToTrack(randomString);
-		startingPositions = RandomMapGenerator
-				.stringToStartingPositions(randomString);
-		itemBoxPositions = RandomMapGenerator
-				.stringToItemPositions(randomString);
-		maxCheckpoint = RandomMapGenerator.stringToCheckpoints(randomString);
-		maxLap = 3;
-		defaultTile = 0;*/
-	}
 
 	public Image getCarImage(int carIndex) {
 		return carImages[carIndex];
@@ -339,50 +219,6 @@ public class VisualRaceTrack {
 
 	public int getItemBoxPositionY(int itemBoxID) {
 		return model.getItemBoxPositions()[itemBoxID][1];
-	}
-
-	/**
-	 * Private class for exclusive use when loading tiles to make setting tile
-	 * properties more controllable.
-	 * 
-	 * @author Florian
-	 *
-	 */
-	private class Tile {
-		String fileName;
-		boolean solid;
-		int checkpointNumber;
-		double frictionCoefficient;
-		boolean transparent;
-
-		Tile(String fileName, boolean solid, int checkpointNumber,
-				double frictionCoefficient, boolean transparent) {
-			this.fileName = fileName;
-			this.solid = solid;
-			this.checkpointNumber = checkpointNumber;
-			this.frictionCoefficient = frictionCoefficient;
-			this.transparent = transparent;
-		}
-
-		String getFileName() {
-			return fileName;
-		}
-
-		boolean getSolid() {
-			return solid;
-		}
-
-		int getCheckpointNumber() {
-			return checkpointNumber;
-		}
-
-		double getFrictionCoefficient() {
-			return frictionCoefficient;
-		}
-
-		boolean getTransparent() {
-			return transparent;
-		}
 	}
 
 	public String getTrackName() {

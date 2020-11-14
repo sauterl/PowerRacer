@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import shared.game.PresetTracks;
+import shared.game.presets.PresetTracks;
 import shared.game.model.RaceTrackModel;
 import shared.io.EntityManager;
 import shared.io.InternalEntityLoader;
