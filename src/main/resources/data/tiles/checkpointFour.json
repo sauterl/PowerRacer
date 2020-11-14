@@ -1,0 +1,8 @@
+{
+  "identifier" : 8,
+  "fileName" : "checkpointFour",
+  "solid" : false,
+  "checkpointNumber" : 4,
+  "frictionCoefficient" : 0.05,
+  "transparent" : false
+}

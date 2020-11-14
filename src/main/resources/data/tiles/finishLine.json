@@ -1,0 +1,8 @@
+{
+  "identifier" : 7,
+  "fileName" : "finishLine",
+  "solid" : false,
+  "checkpointNumber" : 99,
+  "frictionCoefficient" : 0.05,
+  "transparent" : false
+}

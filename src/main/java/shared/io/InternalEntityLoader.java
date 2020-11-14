@@ -19,6 +19,8 @@ import shared.game.model.RaceTrackModel;
  */
 public class InternalEntityLoader implements EntityLoader{
 
+  public static final String GAME_DATA_FOLDER = "data";
+
   private static InternalEntityLoader instance;
 
   public static InternalEntityLoader getInstance(){
@@ -35,7 +37,7 @@ public class InternalEntityLoader implements EntityLoader{
 //    } catch (URISyntaxException e) {
 //      throw new RuntimeException("Couldn't setup basepath", e);
 //    }
-    basePath = null;
+    basePath = folder(GAME_DATA_FOLDER, "");
   }
 
 
@@ -46,7 +48,16 @@ public class InternalEntityLoader implements EntityLoader{
 
   @Override
   public Path raceTrackFolder() {
-    String targetFolder = "data/tracks";
+    return folder(GAME_DATA_FOLDER, RACETRACK_FOLDER);
+  }
+
+  @Override
+  public Path tileFolder() {
+    return folder(GAME_DATA_FOLDER, TILE_FOLDER);
+  }
+
+  private Path folder(String root, String target){
+    String targetFolder = root+"/"+target;
     try {
       URI uri = getClass().getClassLoader().getResource(targetFolder).toURI();
       Path folder;
@@ -69,7 +80,12 @@ public class InternalEntityLoader implements EntityLoader{
 
   @Override
   public Path basePath() {
-    return basePath;
+    return basePath; // NOT sure whether this works for the internal laoder
+  }
+
+  @Override
+  public Path spritesBasePath() {
+    return folder(SPRITES_FOLDER, "");
   }
 
   private final Path basePath;

@@ -1,0 +1,8 @@
+{
+  "identifier" : 3,
+  "fileName" : "snow",
+  "solid" : false,
+  "checkpointNumber" : 0,
+  "frictionCoefficient" : 0.125,
+  "transparent" : false
+}

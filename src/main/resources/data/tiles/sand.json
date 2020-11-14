@@ -1,0 +1,8 @@
+{
+  "identifier" : 2,
+  "fileName" : "sand",
+  "solid" : false,
+  "checkpointNumber" : 0,
+  "frictionCoefficient" : 0.15,
+  "transparent" : false
+}

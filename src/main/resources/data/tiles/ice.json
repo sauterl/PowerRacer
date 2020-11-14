@@ -1,0 +1,8 @@
+{
+  "identifier" : 23,
+  "fileName" : "ice",
+  "solid" : false,
+  "checkpointNumber" : 0,
+  "frictionCoefficient" : 0.125,
+  "transparent" : false
+}

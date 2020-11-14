@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import shared.game.model.RaceTrackModel;
+import shared.game.presets.PresetTiles;
 
 /**
  * TODO: Write JavaDoc
@@ -17,7 +19,23 @@ public class Sandbox {
     ObjectMapper om = new ObjectMapper();
     om.enable(SerializationFeature.INDENT_OUTPUT);
 
+    serialiseAllTiles(om);
+    //serialiseTrack(om);
+  }
+
+  public static void serialiseTrack(ObjectMapper om) throws IOException {
     om.writeValue(new File("mods/tracks/track-test.json"), createOtherTrack());
+  }
+
+  public static void serialiseAllTiles(ObjectMapper om) throws IOException{
+    Arrays.stream(PresetTiles.TILES).forEach( tile -> {
+          try {
+            om.writeValue(new File("src/main/resources/data/tiles/"+tile.getFileName()+".json"), tile);
+          } catch (IOException e) {
+            throw new RuntimeException("Error during serialisation", e);
+          }
+        }
+    );
   }
 
   private static RaceTrackModel createOtherTrack() {

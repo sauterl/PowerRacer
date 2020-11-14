@@ -1,0 +1,8 @@
+{
+  "identifier" : 0,
+  "fileName" : "grass",
+  "solid" : false,
+  "checkpointNumber" : 0,
+  "frictionCoefficient" : 0.1,
+  "transparent" : false
+}

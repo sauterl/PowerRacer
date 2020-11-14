@@ -1,0 +1,8 @@
+{
+  "identifier" : 21,
+  "fileName" : "asphaltDownRight",
+  "solid" : false,
+  "checkpointNumber" : 0,
+  "frictionCoefficient" : 0.05,
+  "transparent" : true
+}
