@@ -5,10 +5,11 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import shared.game.model.RaceTrackModel;
+import shared.game.model.TileModel;
 import shared.game.powerup.Collidable;
 import shared.game.powerup.Powerup;
-import shared.game.presets.PresetTiles;
 import shared.game.presets.PresetTracks;
+import shared.io.EntityManager;
 
 /**
  * The Class keeping track of the games playing field.
@@ -127,20 +128,24 @@ public class VisualRaceTrack {
 	 */
 	private void loadTiles() {
 		ImageIcon fetch;
-		tiles = new Image[PresetTiles.TILES.length];
-		solid = new boolean[PresetTiles.TILES.length];
-		checkpointNumber = new int[PresetTiles.TILES.length];
-		frictionCoefficients = new double[PresetTiles.TILES.length];
-		transparent = new boolean[PresetTiles.TILES.length];
-		for (int i = 0; i < PresetTiles.TILES.length; i++) {
-			fetch = new ImageIcon(getClass().getResource(
-					"/images/" + PresetTiles.TILES[i].getFileName()
-							+ ".png"));
+		EntityManager em = EntityManager.getInstance();
+		int noTiles = em.numberOfTiles();
+		tiles = new Image[noTiles];
+		solid = new boolean[noTiles];
+		checkpointNumber = new int[noTiles];
+		frictionCoefficients = new double[noTiles];
+		transparent = new boolean[noTiles];
+		for (int i = 0; i < noTiles; i++) {
+			TileModel t = em.getTileFromId((byte)i);
+			/*fetch = new ImageIcon(getClass().getResource(
+					"/images/" + t.getFileName()
+							+ ".png"));*/
+			fetch = em.getTileLoaderFor((byte)i).loadSprite(t.getFileName());
 			tiles[i] = fetch.getImage();
-			solid[i] = PresetTiles.TILES[i].getSolid();
-			checkpointNumber[i] = PresetTiles.TILES[i].getCheckpointNumber();
-			frictionCoefficients[i] = PresetTiles.TILES[i].getFrictionCoefficient();
-			transparent[i] = PresetTiles.TILES[i].getTransparent();
+			solid[i] = t.getSolid();
+			checkpointNumber[i] = t.getCheckpointNumber();
+			frictionCoefficients[i] = t.getFrictionCoefficient();
+			transparent[i] = t.getTransparent();
 		}
 	}
 

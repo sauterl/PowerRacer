@@ -3,11 +3,14 @@ package shared.io;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import javax.swing.ImageIcon;
 import shared.game.model.RaceTrackModel;
 import shared.game.model.TileModel;
 
@@ -54,24 +57,34 @@ public interface EntityLoader {
    * @return All tracks the entity loader has access to, or an empty list if none were found
    */
   default List<RaceTrackModel> loadRaceTracks() throws IOException {
-    return Files.list(raceTrackFolder()).filter(JSON_PATH_FILTER).map(f -> {
-      try {
-        return loadRacetrack(f.getFileName().toString());
-      } catch (IOException e) {
-        throw new RuntimeException("Error while loading " + f, e);
-      }
-    }).collect(
-        Collectors.toList());
+    if (Files.exists(raceTrackFolder())) {
+      return Files.list(raceTrackFolder()).filter(JSON_PATH_FILTER).map(f -> {
+        try {
+          return loadRacetrack(f.getFileName().toString());
+        } catch (IOException e) {
+          throw new RuntimeException("Error while loading " + f, e);
+        }
+      }).collect(
+          Collectors.toList());
+
+    } else {
+      return Collections.emptyList();
+    }
   }
 
   default List<TileModel> loadTiles() throws IOException {
-    return Files.list(tileFolder()).filter(JSON_PATH_FILTER).map(f -> {
-      try {
-        return loadTile(f.getFileName().toString());
-      } catch (IOException e) {
-        throw new RuntimeException("Error while loading " + f, e);
-      }
-    }).collect(Collectors.toList());
+    if (Files.exists(tileFolder())) {
+      return Files.list(tileFolder()).filter(JSON_PATH_FILTER).map(f -> {
+        try {
+          return loadTile(f.getFileName().toString());
+        } catch (IOException e) {
+          throw new RuntimeException("Error while loading " + f, e);
+        }
+      }).collect(Collectors.toList());
+
+    } else {
+      return Collections.emptyList();
+    }
   }
 
   /**
@@ -100,6 +113,18 @@ public interface EntityLoader {
 
   default Path tileFolder() {
     return basePath().resolve(TILE_FOLDER);
+  }
+
+  default Path resolveSprite(String path){
+    return spritesBasePath().resolve(path);
+  }
+
+  default ImageIcon loadSprite(String name){
+    try {
+      return new ImageIcon(resolveSprite(name+"."+PNG_EXTENSION).toUri().toURL());
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("Could not load sprite "+name, e);
+    }
   }
 
 }

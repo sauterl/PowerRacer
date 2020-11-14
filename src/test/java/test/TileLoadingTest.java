@@ -3,6 +3,9 @@ package test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import shared.game.model.TileModel;
@@ -29,6 +32,17 @@ public class TileLoadingTest {
     TileModel model = InternalEntityLoader.getInstance().loadTile("asphalt.json");
 
     Assert.assertEquals(PresetTiles.ASPHALT, model);
+  }
+
+  @Test
+  public void testLoadAllTilesMatchesPresets() throws IOException {
+    List<TileModel> tiles = InternalEntityLoader.getInstance().loadTiles();
+    List<TileModel> presets = Arrays.asList(PresetTiles.TILES);
+    Comparator<TileModel> idSorter = (o1, o2) -> Byte.compare(o1.getIdentifier(), o2.getIdentifier());
+    tiles.sort(idSorter);
+    presets.sort(idSorter);
+
+    Assert.assertArrayEquals(presets.toArray(new TileModel[0]), tiles.toArray(new TileModel[0]));
   }
 
 }

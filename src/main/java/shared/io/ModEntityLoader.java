@@ -34,5 +34,10 @@ public class ModEntityLoader implements EntityLoader {
     return basePath;
   }
 
+  @Override
+  public Path spritesBasePath() {
+    return basePath().resolve(SPRITES_FOLDER);
+  }
+
 
 }

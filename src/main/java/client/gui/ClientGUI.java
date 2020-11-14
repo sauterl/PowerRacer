@@ -316,7 +316,7 @@ public class ClientGUI {
 	 */
 	public ClientGUI() {
 		// FIXME this is just a random place to get suff loaded early on
-		EntityManager.getInstance().loadTracks();
+		EntityManager.getInstance().loadGameData();
 
 		// create frame
 		frame = new JFrame("Client");
