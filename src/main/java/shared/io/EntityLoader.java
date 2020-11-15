@@ -127,4 +127,8 @@ public interface EntityLoader {
     }
   }
 
+  default boolean isActive(){
+    return true;
+  }
+
 }

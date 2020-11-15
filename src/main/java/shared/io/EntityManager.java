@@ -41,7 +41,7 @@ public class EntityManager {
     return instance;
   }
 
-  public void loadGameData(){
+  public void loadGameData() {
     loadTracks();
     loadTiles();
     System.out.println("Loading GameData complete");
@@ -49,55 +49,60 @@ public class EntityManager {
 
   public void loadTracks() {
     loaders.forEach(loader -> {
-      List<RaceTrackModel> tracks = null;
-      try {
-        tracks = loader.loadRaceTracks();
-      } catch (IOException e) {
-        throw new RuntimeException("Failed to load tracks",e);
-      }
-      tracks.forEach(track -> {
-        if (this.tracks.containsKey(track.getIdentifier())) {
-          this.tracks.replace(track.getIdentifier(), track);
-        } else {
-          this.tracks.put(track.getIdentifier(), track);
+      if (loader.isActive()) {
+        List<RaceTrackModel> tracks = null;
+        try {
+          tracks = loader.loadRaceTracks();
+        } catch (IOException e) { 
+          throw new RuntimeException("Failed to load tracks", e);
         }
-      });
+        tracks.forEach(track -> {
+          if (this.tracks.containsKey(track.getIdentifier())) {
+            this.tracks.replace(track.getIdentifier(), track);
+          } else {
+            this.tracks.put(track.getIdentifier(), track);
+          }
+        });
+      }
     });
   }
 
-  public void loadTiles(){
+  public void loadTiles() {
     loaders.forEach(loader -> {
-      List<TileModel> tiles = null;
-      try{
-        tiles = loader.loadTiles();
-      } catch (IOException e) {
-        throw new RuntimeException("Failed to load tiles",e);
-      }
-      tiles.forEach(tile -> {
-        if(this.tiles.containsKey(tile.getIdentifier())){
-          this.tiles.replace(tile.getIdentifier(), tile);
-          this.tilesLoaders.replace(tile.getIdentifier(), loader);
-        }else{
-          this.tiles.put(tile.getIdentifier(), tile);
-          this.tilesLoaders.put(tile.getIdentifier(), loader);
+      if (loader.isActive()) {
+        List<TileModel> tiles = null;
+        try {
+          tiles = loader.loadTiles();
+        } catch (IOException e) {
+          throw new RuntimeException("Failed to load tiles", e);
         }
-      });
+        tiles.forEach(tile -> {
+          if (this.tiles.containsKey(tile.getIdentifier())) {
+            this.tiles.replace(tile.getIdentifier(), tile);
+            this.tilesLoaders.replace(tile.getIdentifier(), loader);
+          } else {
+            this.tiles.put(tile.getIdentifier(), tile);
+            this.tilesLoaders.put(tile.getIdentifier(), loader);
+          }
+        });
+
+      }
     });
   }
 
-  public TileModel getTileFromId(byte id){
+  public TileModel getTileFromId(byte id) {
     return this.tiles.get(id);
   }
 
-  public EntityLoader getTileLoaderFor(byte id){
+  public EntityLoader getTileLoaderFor(byte id) {
     return this.tilesLoaders.get(id);
   }
 
-  public int numberOfTiles(){
+  public int numberOfTiles() {
     return this.tiles.size();
   }
 
-  public List<TileModel> getTiles(){
+  public List<TileModel> getTiles() {
     return new ArrayList<>(this.tiles.values());
   }
 
