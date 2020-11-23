@@ -25,7 +25,6 @@ public class CreateServer {
 	 * Creates all the needed objects and start all the needed threads.
 	 */
 	public static void create() {
-		createGUI();
 		createPlayerManager();
 		createLobbyManager();
 		createUpdateManager();
@@ -33,6 +32,11 @@ public class CreateServer {
 		createGameManager();
 		startCheckinServer();
 		startUpdateManager();
+	}
+
+	public static void createWithGUI() {
+		createGUI();
+		create();
 	}
 
 	/**
@@ -51,14 +55,12 @@ public class CreateServer {
 	 */
 	public static void create(int port) {
 		CreateServer.port = port;
-		createGUI();
-		createPlayerManager();
-		createLobbyManager();
-		createUpdateManager();
-		createCheckinServer();
-		createGameManager();
-		startCheckinServer();
-		startUpdateManager();
+		create();
+	}
+
+	public static void createWithGUI(int port) {
+		CreateServer.port = port;
+		createWithGUI();
 	}
 
 	/**

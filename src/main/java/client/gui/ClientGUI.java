@@ -83,14 +83,13 @@ public class ClientGUI {
 			// Do nothing
 		}
 
-		clientGUI = new ClientGUI();
 		if (args.length == 2) {
 			switch (args[0]) {
 				case "server":
-					clientGUI.port = Integer.parseInt(args[1]);
-					clientGUI.create();
+					createServer(Integer.parseInt(args[1]));
 					break;
 				case "client":
+					clientGUI = new ClientGUI();
 					clientGUI.port = Integer.parseInt(args[1].split(":")[1]);
 					clientGUI.connect(args[1].split(":")[0]);
 					break;
@@ -99,6 +98,7 @@ public class ClientGUI {
 					break;
 			}
 		} else {
+			clientGUI = new ClientGUI();
 			clientGUI.refresh();
 		}
 	}
@@ -110,6 +110,16 @@ public class ClientGUI {
 		serverButton.setEnabled(false);
 		serverIp.setVisible(true);
 		refresh();
+	}
+
+	private static void createServer(int port) {
+		new DiscoveryServer();
+		CreateServer.create(port);
+		try {
+			ServerGUI.addToConsole("Started server at IP: " + InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -422,7 +432,7 @@ public class ClientGUI {
 		serverButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				discServ = new DiscoveryServer();
-				CreateServer.create();
+				CreateServer.createWithGUI();
 				serverOn = true;
 				serverButton.setEnabled(false);
 				serverIp.setVisible(true);
