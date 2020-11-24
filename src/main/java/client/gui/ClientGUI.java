@@ -9,6 +9,9 @@ import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,8 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import client.lobby.Client;
 import server.discovery.DiscoveryClient;
 import server.discovery.DiscoveryServer;
-import server.lobby.CreateServer;
-import server.lobby.ServerGUI;
+import server.lobby.*;
 import shared.game.Car;
 import shared.game.PowerRacerGame;
 import shared.game.RaceTrack;
@@ -87,6 +89,7 @@ public class ClientGUI {
 			switch (args[0]) {
 				case "server":
 					createServer(Integer.parseInt(args[1]));
+					ServerGUI.runServerConsole();
 					break;
 				case "client":
 					clientGUI = new ClientGUI();
