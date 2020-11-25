@@ -1,12 +1,10 @@
 package server.lobby;
 
+import server.game.GameManager;
+
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.text.PlainDocument;
-
-import server.game.GameManager;
 
 /**
  * PlayerManager holds all the player in an ArrayList and provides some methods
@@ -19,17 +17,15 @@ public class PlayerManager {
 
 	private static final int MAX_USER = 100;
 	public static ArrayList<Player> playerlist;
-	ChatLogic chat;
 	static Random rand = new Random();
 	public static GameManager gameManager;
-	static LobbyManager lobbyManager;
 
 	/**
 	 * Constructor of the PlayerManager, creates an ArrayList for all the
 	 * players.
 	 */
 	public PlayerManager() {
-		playerlist = new ArrayList<Player>();
+		playerlist = new ArrayList<>();
 		ServerGUI.addToConsole("Playermanager created.");
 	}
 
@@ -59,16 +55,18 @@ public class PlayerManager {
 	 * Lets a new random run to give back an unused ID for a new player.
 	 */
 	private static int getNewID() {
+		// FIXME: This is a terrible way to generate player IDs and why are only up to 200 players allowed?
 		while (true) {
-			out: while (true) {
-				int tempID = rand.nextInt(200) + 5;
-				for (int i = 0; i < playerlist.size(); i++) {
-					if (tempID == playerlist.get(i).id) {
-						break out;
-					}
+			boolean used = false;
+			int tempID = rand.nextInt(200) + 5;
+			for (Player player : playerlist) {
+				if (tempID == player.id) {
+					used = true;
+					break;
 				}
-				return tempID;
 			}
+			if (!used)
+				return tempID;
 		}
 	}
 
@@ -83,7 +81,7 @@ public class PlayerManager {
 		playerlist.remove(player);
 		if (player.getID() != 99999) {
 			ServerGUI.addToConsole("Removed player with name: "
-					+ player.getName() + " and ID: " + player.getID() + " .");
+					+ player.getName() + " and ID: " + player.getID() + ".");
 		}
 	}
 
@@ -96,8 +94,8 @@ public class PlayerManager {
 	 * @return false if name is already in use, true if not
 	 */
 	public static boolean checkName(String prefName) {
-		for (int i = 0; i < playerlist.size(); i++) {
-			if (playerlist.get(i).name.equals(prefName)) {
+		for (Player player : playerlist) {
+			if (player.name.equals(prefName)) {
 				return false;
 			}
 		}
@@ -114,25 +112,21 @@ public class PlayerManager {
 	 *            the packet that will be sent
 	 */
 	public static void packetToOtherPlayers(Player player, String string) {
-		for (int i = 0; i < playerlist.size(); i++) {
-			if (player.name != playerlist.get(i).name) {
-				playerlist.get(i).commandQueue.add(string);
+		for (Player other : playerlist) {
+			if (!player.name.equals(other.name)) {
+				other.commandQueue.add(string);
 			}
 		}
 	}
 
 	public static boolean hasSpace() {
-		if (PlayerManager.playerlist.size() < MAX_USER) {
-			return true;
-		} else {
-			return false;
-		}
+		return PlayerManager.playerlist.size() < MAX_USER;
 	}
 
 	public static void newPlayerLogin(Player player, String prefName) {
 		String prefNameIter = prefName;
 		int i = 0;
-		while (checkName(prefNameIter) == false) {
+		while (!checkName(prefNameIter)) {
 			prefNameIter = prefName + i;
 			i++;
 		}
@@ -141,7 +135,7 @@ public class PlayerManager {
 		LobbyLogic.sendLoginInformationToOtherPlayers(player);
 		LobbyLogic.sendOpenLobbyInformation(player);
 		ServerGUI.addToConsole("New player connected with name: "
-				+ player.getName() + " and ID: " + player.getID() + " .");
+				+ player.getName() + " and ID: " + player.getID() + ".");
 	}
 
 	public static void newNameForUser(Player player, String parts) {
@@ -156,8 +150,8 @@ public class PlayerManager {
 
 	public static String getAllOnlinePlayerNames() {
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < playerlist.size(); i++) {
-			result.append(playerlist.get(i).getName());
+		for (Player player : playerlist) {
+			result.append(player.getName());
 			result.append(":");
 		}
 		return result.toString();

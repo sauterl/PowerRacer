@@ -1,5 +1,7 @@
 package server.lobby;
 
+import shared.game.RaceTrack;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.NoSuchElementException;
@@ -100,41 +102,65 @@ public class ServerGUI {
 				"  help - Print this help dialog.\n" +
 				"  k:NAME:REASON - Kick a player with name NAME displaying the text REASON.\n" +
 				"  b:TEXT - Send server broadcast with text TEXT.\n" +
+				"  players - List currently connected players.\n" +
+				"  lobbies - List currently open lobbies.\n" +
 				"  exit - Exit server.\n" +
 				"  quit - Quit server.";
 		Scanner scan = new Scanner(System.in);
-		while (true) {
+		serverLoop: while (true) {
 			try {
 				String input = scan.nextLine();
 				String lowerInput = input.toLowerCase();
-				if (lowerInput.equals("help")) {
-					System.out.println(helpMessage);
-				} else if (lowerInput.equals("exit") || lowerInput.equals("quit")) {
-					break;
-				} else if (lowerInput.startsWith("k:")) {
-					String[] parts = input.split(":");
-					if (parts.length == 3) {
-						Player player = PlayerManager.getPlayerWithName(parts[1]);
-						if (player != null) {
-							player.increaseKickCounter(10, parts[2]);
-						} else {
-							System.err.println("No player with name \"" + parts[1] + "\"!");
+				switch (lowerInput) {
+					case "help":
+						System.out.println(helpMessage);
+						break;
+					case "exit":
+					case "quit":
+						break serverLoop;
+					case "players":
+						System.out.println("Currently online players:");
+						for (Player player : PlayerManager.playerlist) {
+							System.out.println("  " + player.name);
 						}
-					} else {
-						System.err.println("Kick command formatted incorrectly!");
-						System.out.println(helpMessage);
-					}
-				} else if (lowerInput.startsWith("b:")) {
-					String[] parts = input.split(":");
-					if (parts.length == 2) {
-						String broadcast = parts[1];
-						ChatLogic.serverBroadcast(broadcast);
-					} else {
-						System.err.println("Broadcast command formatted incorrectly!");
-						System.out.println(helpMessage);
-					}
-				} else {
-					System.err.println("Unknown command \"" + input + "\"");
+						break;
+					case "lobbies":
+						System.out.println("Currently available lobbies:");
+						for (Lobby lobby : LobbyManager.lobbylist) {
+							System.out.println("  ID: " + lobby.lobbyID);
+							System.out.println("    Track: " + RaceTrack.getTrackName(lobby.getTrack()));
+							System.out.println("    Creator: " + lobby.creatorPlayer.name);
+							System.out.println("    Players: " + String.join(", ",
+											lobby.lobbylist.stream()
+													.map(player -> player.name).toArray(String[]::new)));
+						}
+						break;
+					default:
+						if (lowerInput.startsWith("k:")) {
+							String[] parts = input.split(":");
+							if (parts.length == 3) {
+								Player player = PlayerManager.getPlayerWithName(parts[1]);
+								if (player != null) {
+									player.increaseKickCounter(10, parts[2]);
+								} else {
+									System.err.println("No player with name \"" + parts[1] + "\"!");
+								}
+							} else {
+								System.err.println("Kick command formatted incorrectly!");
+								System.out.println(helpMessage);
+							}
+						} else if (lowerInput.startsWith("b:")) {
+							String[] parts = input.split(":");
+							if (parts.length == 2) {
+								String broadcast = parts[1];
+								ChatLogic.serverBroadcast(broadcast);
+							} else {
+								System.err.println("Broadcast command formatted incorrectly!");
+								System.out.println(helpMessage);
+							}
+						} else {
+							System.err.println("Unknown command \"" + input + "\"");
+						}
 				}
 			} catch (NoSuchElementException e) {
 				// CTRL-D detected
