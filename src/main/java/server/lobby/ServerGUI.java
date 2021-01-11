@@ -12,7 +12,6 @@ import java.util.Scanner;
  * Small GUI for server host to monitor activity and kick players.
  *
  * @author Florian
- *
  */
 public class ServerGUI {
 
@@ -83,8 +82,7 @@ public class ServerGUI {
 	 * Adds the argument message to the JTextArea chatBox and scrolls its Focus
 	 * down to the new message.
 	 *
-	 * @param message
-	 *            text to be added to chat
+	 * @param message text to be added to chat
 	 */
 	public static void addToConsole(String message) {
 		if (serverGUI != null) {
@@ -107,7 +105,8 @@ public class ServerGUI {
 				"  exit - Exit server.\n" +
 				"  quit - Quit server.";
 		Scanner scan = new Scanner(System.in);
-		serverLoop: while (true) {
+		serverLoop:
+		while (true) {
 			try {
 				String input = scan.nextLine();
 				String lowerInput = input.toLowerCase();
@@ -131,35 +130,64 @@ public class ServerGUI {
 							System.out.println("    Track: " + RaceTrack.getTrackName(lobby.getTrack()));
 							System.out.println("    Creator: " + lobby.creatorPlayer.name);
 							System.out.println("    Players: " + String.join(", ",
-											lobby.lobbylist.stream()
-													.map(player -> player.name).toArray(String[]::new)));
+									lobby.lobbylist.stream()
+											.map(player -> player.name).toArray(String[]::new)));
 						}
 						break;
 					default:
-						if (lowerInput.startsWith("k:")) {
-							String[] parts = input.split(":");
-							if (parts.length == 3) {
-								Player player = PlayerManager.getPlayerWithName(parts[1]);
-								if (player != null) {
-									player.increaseKickCounter(10, parts[2]);
+						String[] parts = input.split(":");
+						if (parts.length == 0)
+							break;
+						String command = parts[0];
+						switch (command) {
+							case "k":
+								if (parts.length == 3) {
+									Player player = PlayerManager.getPlayerWithName(parts[1]);
+									if (player != null) {
+										player.increaseKickCounter(10, parts[2]);
+									} else {
+										System.err.println("No player with name \"" + parts[1] + "\"!");
+									}
 								} else {
-									System.err.println("No player with name \"" + parts[1] + "\"!");
+									System.err.println("Kick command formatted incorrectly!");
+									System.out.println(helpMessage);
 								}
-							} else {
-								System.err.println("Kick command formatted incorrectly!");
-								System.out.println(helpMessage);
-							}
-						} else if (lowerInput.startsWith("b:")) {
-							String[] parts = input.split(":");
-							if (parts.length == 2) {
-								String broadcast = parts[1];
-								ChatLogic.serverBroadcast(broadcast);
-							} else {
-								System.err.println("Broadcast command formatted incorrectly!");
-								System.out.println(helpMessage);
-							}
-						} else {
-							System.err.println("Unknown command \"" + input + "\"");
+								break;
+							case "b":
+								if (parts.length == 2) {
+									String broadcast = parts[1];
+									ChatLogic.serverBroadcast(broadcast);
+								} else {
+									System.err.println("Broadcast command formatted incorrectly!");
+									System.out.println(helpMessage);
+								}
+								break;
+							case "rmlobby":
+								if (parts.length == 2) {
+									try {
+										int lobbyId = Integer.parseInt(parts[1]);
+										Lobby lobby = LobbyManager.getLobby(lobbyId);
+										if (lobby == null) {
+											System.err.println("Lobby with ID " + lobbyId + " does not exist!");
+											break;
+										}
+										if (lobby.getLobbylist().size() > 0) {
+											System.err.println("Lobby with ID " + lobbyId + " is not empty!");
+											break;
+										}
+										LobbyLogic.sendLobbyDeletion(lobbyId);
+										LobbyManager.lobbylist.remove(lobby);
+										ServerGUI.addToConsole("Lobby with ID " + lobbyId + " destroyed.");
+									} catch (NumberFormatException e) {
+										System.err.println("Lobby ID must be an integer!");
+									}
+								} else {
+									System.err.println("Remove lobby command formatted incorrectly!");
+									System.out.println(helpMessage);
+								}
+								break;
+							default:
+								System.err.println("Unknown command \"" + input + "\"");
 						}
 				}
 			} catch (NoSuchElementException e) {

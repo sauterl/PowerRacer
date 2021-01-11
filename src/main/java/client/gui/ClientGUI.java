@@ -1,51 +1,30 @@
 package client.gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import client.lobby.Client;
 import server.discovery.DiscoveryClient;
 import server.discovery.DiscoveryServer;
-import server.lobby.*;
+import server.lobby.CreateServer;
+import server.lobby.ServerGUI;
 import shared.game.Car;
 import shared.game.PowerRacerGame;
 import shared.game.RaceTrack;
 import shared.game.powerup.Powerup;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Main GUI class, which is also run to start the game.
- * 
- * @author Florian
  *
+ * @author Florian
  */
 public class ClientGUI {
 	static DiscoveryServer discServ;
@@ -135,9 +114,8 @@ public class ClientGUI {
 
 	/**
 	 * Instantiates a new Client object with the IP address.
-	 * 
-	 * @param ip
-	 *            Server IP
+	 *
+	 * @param ip Server IP
 	 */
 	public void connect(String ip) {
 		client = new Client(ip, this, port);
@@ -157,15 +135,14 @@ public class ClientGUI {
 	/**
 	 * Resets the GUI, but also displays a message letting the player know he
 	 * was kicked, and why.
-	 * 
-	 * @param message
-	 *            The reason why the player was kicked
+	 *
+	 * @param message The reason why the player was kicked
 	 */
 	public static void kickReset(String message) {
 		reset();
 		try {
 			Thread.sleep(100);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 		}
 		JOptionPane.showMessageDialog(clientGUI.frame,
 				"You have been kicked from the server because:\n" + message);
@@ -173,9 +150,8 @@ public class ClientGUI {
 
 	/**
 	 * Sets the feedback JLabel to the argument text.
-	 * 
-	 * @param text
-	 *            feedback text
+	 *
+	 * @param text feedback text
 	 */
 	public void setFeedback(String text) {
 		feedback.setText(text);
@@ -183,9 +159,8 @@ public class ClientGUI {
 
 	/**
 	 * Sets the ready boolean and changes the text and color of the JLabel.
-	 * 
-	 * @param ready
-	 *            self explanatory
+	 *
+	 * @param ready self explanatory
 	 */
 	public void setReady(boolean ready) {
 		this.ready = ready;
@@ -202,9 +177,8 @@ public class ClientGUI {
 	/**
 	 * Adds the argument message to the JTextArea chatBox and scrolls its Focus
 	 * down to the new message.
-	 * 
-	 * @param message
-	 *            text to be added to chat
+	 *
+	 * @param message text to be added to chat
 	 */
 	public void addToChat(String message) {
 		chatBox.append("\n\n" + message);
@@ -214,9 +188,8 @@ public class ClientGUI {
 	/**
 	 * Analyzes the argument message and adds the correct packet to the
 	 * {@link Client}'s commandQueue.
-	 * 
-	 * @param message
-	 *            input taken directly from user chat
+	 *
+	 * @param message input taken directly from user chat
 	 */
 	public void sendChatRequest(String message) {
 		message = message.replace(":", "\\;");
@@ -232,19 +205,11 @@ public class ClientGUI {
 								+ messageSplit[1]
 								+ ":"
 								+ message.substring(messageSplit[0].length()
-										+ messageSplit[1].length() + 2));
-						// System.out.println(message.substring(messageSplit[0].length()+
-						// messageSplit[1].length() + 2));
+								+ messageSplit[1].length() + 2));
 					} else {
 						addToChat("Whisper incomplete: Missing name or message!");
 					}
 					break;
-				/*
-				 * case "\\c": message = message.replace("\\;", ":"); if
-				 * (messageSplit.length > 1) {
-				 * client.commandQueue.add(message.substring(3)); } else {
-				 * setFeedback("Missing command!"); } break;
-				 */
 				case "\\a":
 					if (messageSplit.length > 1) {
 						client.commandQueue
@@ -287,11 +252,9 @@ public class ClientGUI {
 	 * <p>
 	 * Stores lobby list data in ArrayList lobbyListData and then fills new data
 	 * array with properly formatted lobby names.
-	 * 
-	 * @param lobbyName
-	 *            the servers name of the lobby
-	 * @param trackName
-	 *            the name of the lobby's track
+	 *
+	 * @param lobbyName the servers name of the lobby
+	 * @param trackName the name of the lobby's track
 	 */
 	public void addToLobbyList(String lobbyName, String trackName) {
 		lobbyListData.add(lobbyName);
@@ -306,18 +269,16 @@ public class ClientGUI {
 
 	/**
 	 * Removes the parameter lobby from the list of lobbies.
-	 * 
-	 * @param lobbyName
-	 *            the Server name for the lobby (usually a number)
+	 *
+	 * @param lobbyName the Server name for the lobby (usually a number)
 	 */
 	public void removeFromLobbyList(String lobbyName) {
-		if (lobbyListData.indexOf(lobbyName) >= 0) {
+		if (lobbyListData.contains(lobbyName)) {
 			lobbyListTrackData.remove(lobbyListData.indexOf(lobbyName));
 			lobbyListData.remove(lobbyName);
 			String[] data = new String[lobbyListData.size()];
 			for (int i = 0; i < data.length; i++) {
-				data[i] = "Lobby " + lobbyListData.get(i) + " "
-						+ lobbyListTrackData.get(i);
+				data[i] = "Lobby " + lobbyListData.get(i) + " " + lobbyListTrackData.get(i);
 			}
 			list.setListData(data);
 		}
@@ -343,14 +304,10 @@ public class ClientGUI {
 			@Override
 			public void windowClosing(WindowEvent we) {
 				if (serverOn) {
-					if (1 == JOptionPane
-							.showOptionDialog(
-									frame,
-									"You are running a server. Are you sure you want to quit?",
-									"Exit?", JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE, null,
-									new Object[] { "No", "Yes" },
-									((Object) "No"))) {
+					if (1 == JOptionPane.showOptionDialog(frame,
+							"You are running a server. Are you sure you want to quit?", "Exit?",
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null,
+							new Object[]{"No", "Yes"}, "No")) {
 						// TODO: Close Server here
 
 						discServ.terminate();
@@ -374,7 +331,7 @@ public class ClientGUI {
 		try {
 			serverIp.setText("IP: "
 					+ InetAddress.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e) {
+		} catch (UnknownHostException ignored) {
 		}
 
 		// create panels
@@ -403,22 +360,20 @@ public class ClientGUI {
 				.addComponent(joinButton).addComponent(serverIp));
 
 		// create server list
-		list = new JList<String>(new String[] {});
+		list = new JList<>(new String[]{});
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) {
+		list.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
 
-					if (list.getSelectedIndex() == -1) {
-						// No selection
-						joinButton.setEnabled(false);
+				if (list.getSelectedIndex() == -1) {
+					// No selection
+					joinButton.setEnabled(false);
 
-					} else {
-						// Selection
-						joinButton.setEnabled(true);
-						select = list.getSelectedIndex();
-					}
+				} else {
+					// Selection
+					joinButton.setEnabled(true);
+					select = list.getSelectedIndex();
 				}
 			}
 		});
@@ -427,47 +382,35 @@ public class ClientGUI {
 		serverPanel.add(serverList);
 
 		// Determine Button events
-		refreshButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refresh();
-			}
+		refreshButton.addActionListener(e -> refresh());
+		serverButton.addActionListener(e -> {
+			discServ = new DiscoveryServer();
+			CreateServer.createWithGUI();
+			serverOn = true;
+			serverButton.setEnabled(false);
+			serverIp.setVisible(true);
+			refresh();
+			ServerGUI.addToConsole("Welcome to the Server Console!\nEnter text below to broadcast to all players.");
 		});
-		serverButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				discServ = new DiscoveryServer();
-				CreateServer.createWithGUI();
-				serverOn = true;
-				serverButton.setEnabled(false);
-				serverIp.setVisible(true);
-				refresh();
-				ServerGUI
-						.addToConsole("Welcome to the Server Console!\nEnter text below to broadcast to all players.");
-			}
-		});
-		joinButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				connect(addresses[select].getHostName());
-			}
-		});
-		connectIpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String input = ipField.getText();
-				Pattern pattern = Pattern
-						.compile("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-				Matcher matcher = pattern.matcher(input);
-				if (matcher.matches()) {
-					feedback.setText("Connecting...");
-					try {
-						connectIpButton.setEnabled(false);
-						connect(InetAddress.getByName(input).getHostName());
-					} catch (UnknownHostException ex) {
-						setFeedback("Unknown Host!");
-						connectIpButton.setEnabled(true);
-					}
-				} else {
-					setFeedback("Not an IP!");
+		joinButton.addActionListener(e -> connect(addresses[select].getHostName()));
+		connectIpButton.addActionListener(e -> {
+			String input = ipField.getText();
+			Pattern pattern = Pattern.compile(
+					"\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b"
+			);
+			Matcher matcher = pattern.matcher(input);
+			if (matcher.matches()) {
+				feedback.setText("Connecting...");
+				try {
+					connectIpButton.setEnabled(false);
+					connect(InetAddress.getByName(input).getHostName());
+				} catch (UnknownHostException ex) {
+					setFeedback("Unknown Host!");
 					connectIpButton.setEnabled(true);
 				}
+			} else {
+				setFeedback("Not an IP!");
+				connectIpButton.setEnabled(true);
 			}
 		});
 
@@ -507,33 +450,36 @@ public class ClientGUI {
 		frame.setVisible(true);
 
 		helpButton = new JButton("Help");
-		helpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane
-						.showMessageDialog(
-								frame,
-								"Controls:\nW or Up arrow = accelerate\nS or Down arrow = reverse\nA and D or Left and Right arrows = steer\nSPACE or V = activate Powerup\n- and + or O and P = zoom out and in\nT = toggle player names\nM = toggle Music\n1-5 = change window position\nF = toggle Fullscreen\nC = screenshot",
-								"Help", JOptionPane.PLAIN_MESSAGE);
-			}
-		});
+		helpButton.addActionListener(e -> JOptionPane.showMessageDialog(frame,
+				"Controls:\n" +
+						"W or Up arrow = accelerate\n" +
+						"S or Down arrow = reverse\n" +
+						"A and D or Left and Right arrows = steer\n" +
+						"SPACE or V = activate Powerup\n" +
+						"- and + or O and P = zoom out and in\n" +
+						"T = toggle player names\n" +
+						"M = toggle Music\n" +
+						"1-5 = change window position\n" +
+						"F = toggle Fullscreen\n" +
+						"C = screenshot",
+				"Help", JOptionPane.PLAIN_MESSAGE));
 
 		chatHelpButton = new JButton("Chat Help");
-		chatHelpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane
-						.showMessageDialog(
-								frame,
-								"Chat Commands:\nWhisper: \\w name message\nList players: \\l\nChange name: \\n name\nTo broadcast use: \\a message\nList running games: \\g\nList game history: \\h",
-								"Chat Help", JOptionPane.PLAIN_MESSAGE);
-			}
-		});
+		chatHelpButton.addActionListener(e -> JOptionPane.showMessageDialog(frame,
+				"Chat Commands:\n" +
+						"Whisper: \\w name message\n" +
+						"List players: \\l\n" +
+						"Change name: \\n name\n" +
+						"To broadcast use: \\a message\n" +
+						"List running games: \\g\n" +
+						"List game history: \\h",
+				"Chat Help", JOptionPane.PLAIN_MESSAGE));
 	}
 
 	/**
 	 * Moves the GUI to a world chat with lobby selection.
-	 * 
-	 * @param name
-	 *            name given by the server
+	 *
+	 * @param name name given by the server
 	 */
 	public void moveToServer(String name) {
 		// save frame position on screen
@@ -552,10 +498,9 @@ public class ClientGUI {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we) {
-				if (1 == JOptionPane.showOptionDialog(frame,
-						"Would you like to log out?", "Log Out?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-						null, new Object[] { "No", "Yes" }, ((Object) "No"))) {
+				if (1 == JOptionPane.showOptionDialog(frame, "Would you like to log out?", "Log Out?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[]{"No", "Yes"},
+						"No")) {
 					client.commandQueue.add("LGOUR");
 				}
 			}
@@ -565,12 +510,7 @@ public class ClientGUI {
 		JPanel panel = new JPanel();
 		ipField = new JTextField();
 		ipField.setPreferredSize(new Dimension(400, 10));
-		ipField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				sendChatRequest(ipField.getText());
-			}
-		});
+		ipField.addActionListener(e -> sendChatRequest(ipField.getText()));
 		JButton sendButton = new JButton("Send");
 
 		// set first time login content
@@ -596,49 +536,37 @@ public class ClientGUI {
 
 		JLabel selectTrack = new JLabel("Select Track:");
 		trackSelect = RaceTrack.RACETRACK_SMALL;
-		JComboBox<String> trackSelection = new JComboBox<String>(
-				RaceTrack.TRACK_NAMES);
+		JComboBox<String> trackSelection = new JComboBox<>(RaceTrack.TRACK_NAMES);
 		trackSelection.setSelectedItem(RaceTrack.RACETRACK_SMALL);
 		trackSelection.setMaximumSize(logOutButton.getSize());
 
-		trackSelection.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				trackSelect = trackSelection.getSelectedIndex();
-			}
-		});
+		trackSelection.addActionListener(e -> trackSelect = trackSelection.getSelectedIndex());
 
 		// create lobby list
-		list = new JList<String>(new String[] {});
+		list = new JList<>(new String[]{});
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) {
-
-					if (list.getSelectedIndex() == -1) {
-						// No selection
-						joinButton.setEnabled(false);
-
-					} else {
-						// Selection
-						joinButton.setEnabled(true);
-						select = list.getSelectedIndex();
-					}
+		list.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				if (list.getSelectedIndex() == -1) {
+					// No selection
+					joinButton.setEnabled(false);
+				} else {
+					// Selection
+					joinButton.setEnabled(true);
+					select = list.getSelectedIndex();
 				}
 			}
 		});
-		lobbyListData = new ArrayList<String>();
-		lobbyListTrackData = new ArrayList<String>();
+		lobbyListData = new ArrayList<>();
+		lobbyListTrackData = new ArrayList<>();
 		JScrollPane lobbyList = new JScrollPane(list);
 		lobbyList.setPreferredSize(new Dimension(200, 400));
 
 		JButton creditsButton = new JButton("Credits");
-		creditsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new CreditsWindow(creditsButton);
-				creditsButton.setEnabled(false);
-			}
+		creditsButton.addActionListener(e -> {
+			new CreditsWindow(creditsButton);
+			creditsButton.setEnabled(false);
 		});
 
 		// set GroupLayout for panel
@@ -654,7 +582,7 @@ public class ClientGUI {
 								.addComponent(ipField))
 				.addComponent(sendButton)
 				.addGroup(layout.createParallelGroup().addComponent(lobbyList)
-				/* .addComponent(feedback) */)
+						/* .addComponent(feedback) */)
 				.addGroup(
 						layout.createParallelGroup().addComponent(createLobby)
 								.addComponent(selectTrack)
@@ -684,33 +612,13 @@ public class ClientGUI {
 				.addGroup(
 						layout.createParallelGroup().addComponent(ipField)
 								.addComponent(sendButton)
-				/* .addComponent(feedback) */));
+						/* .addComponent(feedback) */));
 
 		// define button action listeners
-		sendButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				sendChatRequest(ipField.getText());
-			}
-		});
-		logOutButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				client.commandQueue.add("LGOUR");
-			}
-		});
-		createLobby.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				client.commandQueue.add("LOBCR:" + trackSelect);
-			}
-		});
-		joinButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				client.commandQueue.add("LOBJR:" + lobbyListData.get(select));
-			}
-		});
+		sendButton.addActionListener(e -> sendChatRequest(ipField.getText()));
+		logOutButton.addActionListener(e -> client.commandQueue.add("LGOUR"));
+		createLobby.addActionListener(e -> client.commandQueue.add("LOBCR:" + trackSelect));
+		joinButton.addActionListener(e -> client.commandQueue.add("LOBJR:" + lobbyListData.get(select)));
 
 		// add to frame, pack, set first time login messages and set visible
 		frame.getContentPane().add(panel);
@@ -733,9 +641,8 @@ public class ClientGUI {
 	/**
 	 * Moves the GUI to the lobby screen by disposing of previous frame and
 	 * creating new one.
-	 * 
-	 * @param lobbyName
-	 *            server name for lobby, usually lobby number as String
+	 *
+	 * @param lobbyName server name for lobby, usually lobby number as String
 	 */
 	public void moveToLobby(String lobbyName) {
 		// dispose and re-instantiate frame
@@ -752,10 +659,9 @@ public class ClientGUI {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we) {
-				if (1 == JOptionPane.showOptionDialog(frame,
-						"Would you like to leave the lobby?", "Leave Lobby?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-						null, new Object[] { "No", "Yes" }, ((Object) "No"))) {
+				if (1 == JOptionPane.showOptionDialog(frame, "Would you like to leave the lobby?",
+						"Leave Lobby?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null,
+						new Object[]{"No", "Yes"}, "No")) {
 					client.commandQueue.add("LOBLR");
 				}
 			}
@@ -765,70 +671,62 @@ public class ClientGUI {
 		JPanel panel = new JPanel();
 		JButton sendButton = new JButton("Send");
 		JButton leaveLobbyButton = new JButton("Leave Lobby");
-		JScrollPane scrollPane = new JScrollPane(chatBox,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane scrollPane = new JScrollPane(chatBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(new Dimension(400, 400));
 		feedback.setMinimumSize(new Dimension(400, 20));
-		readyLabel = new JLabel(
-				"<html><font color='red'>Not Ready</font></html>");
+		readyLabel = new JLabel("<html><font color='red'>Not Ready</font></html>");
 		ready = false;
 		JButton toggleReadyButton = new JButton("Toggle Ready");
 		JLabel selectRes = new JLabel("Select Resolution:");
-		JComboBox<String> resolutionSelection = new JComboBox<String>(
-				new String[] { STANDARD_RESOLUTION_360P,
+		JComboBox<String> resolutionSelection = new JComboBox<>(
+				new String[]{STANDARD_RESOLUTION_360P,
 						HIGH_DEFINITION_RESOLUTION_720P,
 						FULL_HIGH_DEFINITION_RESOLUTION_1080P,
 						QUAD_HIGH_DEFINITION_RESOLUTION_1440P,
-						QUAD_FULL_HIGH_DEFINITION_RESOLUTION_4K });
+						QUAD_FULL_HIGH_DEFINITION_RESOLUTION_4K});
 		resolutionSelection.setSelectedItem(HIGH_DEFINITION_RESOLUTION_720P);
 		resolutionSelection.setMaximumSize(toggleReadyButton.getSize());
 
-		resolutionSelection.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				switch ((String) resolutionSelection.getSelectedItem()) {
-					case STANDARD_RESOLUTION_360P:
-						resX = 640;
-						resY = 360;
-						break;
-					case HIGH_DEFINITION_RESOLUTION_720P:
-						resX = 1280;
-						resY = 720;
-						break;
-					case FULL_HIGH_DEFINITION_RESOLUTION_1080P:
-						resX = 1920;
-						resY = 1080;
-						break;
-					case QUAD_HIGH_DEFINITION_RESOLUTION_1440P:
-						resX = 2560;
-						resY = 1440;
-						break;
-					case QUAD_FULL_HIGH_DEFINITION_RESOLUTION_4K:
-						resX = 3840;
-						resY = 2160;
-						break;
-					default:
-						break;
-				}
+		resolutionSelection.addActionListener(e -> {
+			switch ((String) Objects.requireNonNull(resolutionSelection.getSelectedItem())) {
+				case STANDARD_RESOLUTION_360P:
+					resX = 640;
+					resY = 360;
+					break;
+				case HIGH_DEFINITION_RESOLUTION_720P:
+					resX = 1280;
+					resY = 720;
+					break;
+				case FULL_HIGH_DEFINITION_RESOLUTION_1080P:
+					resX = 1920;
+					resY = 1080;
+					break;
+				case QUAD_HIGH_DEFINITION_RESOLUTION_1440P:
+					resX = 2560;
+					resY = 1440;
+					break;
+				case QUAD_FULL_HIGH_DEFINITION_RESOLUTION_4K:
+					resX = 3840;
+					resY = 2160;
+					break;
+				default:
+					break;
 			}
 		});
 
 		JLabel selectCar = new JLabel("Select Car:");
 		JLabel selectedCar = new JLabel(Car.CAR_NAMES[Car.RACER]);
 		carSelect = Car.RACER;
-		carSelection = new JComboBox<ImageIcon>(RaceTrack.getCarImageArray());
+		carSelection = new JComboBox<>(RaceTrack.getCarImageArray());
 		carSelection.setSelectedItem(Car.RACER);
 
 		carSelection.setMaximumSize(new Dimension(Camera.TILE_SIDE_LENGTH,
 				Camera.TILE_SIDE_LENGTH));
 
-		carSelection.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				carSelect = carSelection.getSelectedIndex();
-				selectedCar.setText(Car.CAR_NAMES[carSelect]);
-			}
+		carSelection.addActionListener(e -> {
+			carSelect = carSelection.getSelectedIndex();
+			selectedCar.setText(Car.CAR_NAMES[carSelect]);
 		});
 
 		// set GroupLayout for panel
@@ -876,26 +774,15 @@ public class ClientGUI {
 				.addComponent(feedback));
 
 		// set button action listeners
-		sendButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		sendButton.addActionListener(e -> sendChatRequest(ipField.getText()));
+		leaveLobbyButton.addActionListener(e -> client.commandQueue.add("LOBLR"));
+		toggleReadyButton.addActionListener(e -> {
+			if (ready) {
+				client.commandQueue.add("LOBUR");
+			} else {
+				client.commandQueue.add("LOBRR:" + carSelect);
+			}
 
-				sendChatRequest(ipField.getText());
-			}
-		});
-		leaveLobbyButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				client.commandQueue.add("LOBLR");
-			}
-		});
-		toggleReadyButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (ready) {
-					client.commandQueue.add("LOBUR");
-				} else {
-					client.commandQueue.add("LOBRR:" + carSelect);
-				}
-
-			}
 		});
 
 		// add, pack and set visible
@@ -916,9 +803,8 @@ public class ClientGUI {
 
 	/**
 	 * Starts a Camera for the parameter game.
-	 * 
-	 * @param game
-	 *            the game object containing the relevant information
+	 *
+	 * @param game the game object containing the relevant information
 	 */
 	public void startCamera(PowerRacerGame game) {
 		frame.setVisible(false);
@@ -936,9 +822,8 @@ public class ClientGUI {
 	/**
 	 * Thread used to call the DiscoveryClient class and get a list of available
 	 * servers.
-	 * 
-	 * @author Florian
 	 *
+	 * @author Florian
 	 */
 	class RefreshThread extends Thread {
 		JButton button;
@@ -969,21 +854,17 @@ public class ClientGUI {
 	/**
 	 * Used to check whether a camera object is set, to avoid null pointers with
 	 * bogus packets.
-	 * 
+	 *
 	 * @return if the camera exists
 	 */
 	public boolean cameraExists() {
-		if (camera == null) {
-			return false;
-		}
-		return true;
+		return camera != null;
 	}
 
 	/**
 	 * Adds the parameter power up to the camera.
-	 * 
-	 * @param vfx
-	 *            the power up to be added as vfx
+	 *
+	 * @param vfx the power up to be added as vfx
 	 */
 	public void addEffect(Powerup vfx) {
 		camera.addVFX(vfx);
