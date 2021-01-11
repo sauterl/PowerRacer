@@ -589,24 +589,23 @@ public class ClientGUI {
 		scrollPane.setPreferredSize(new Dimension(400, 400));
 
 		// define non chat function buttons
-		JButton createLobby = new JButton("Create Lobby");
+//		JButton createLobby = new JButton("Create Lobby");
 		JButton joinButton = new JButton("Join");
 		JButton logOutButton = new JButton("Log Out");
 		joinButton.setEnabled(false);
 
-		JLabel selectTrack = new JLabel("Select Track:");
-		trackSelect = RaceTrack.RACETRACK_SMALL;
-		JComboBox<String> trackSelection = new JComboBox<String>(
-				RaceTrack.TRACK_NAMES);
-		trackSelection.setSelectedItem(RaceTrack.RACETRACK_SMALL);
-		trackSelection.setMaximumSize(logOutButton.getSize());
+//		JLabel selectTrack = new JLabel("Select Track:");
+//		trackSelect = RaceTrack.RACETRACK_SMALL;
+//		JComboBox<String> trackSelection = new JComboBox<String>(RaceTrack.TRACK_NAMES);
+//		trackSelection.setSelectedItem(RaceTrack.RACETRACK_SMALL);
+//		trackSelection.setMaximumSize(logOutButton.getSize());
 
-		trackSelection.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				trackSelect = trackSelection.getSelectedIndex();
-			}
-		});
+//		trackSelection.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				trackSelect = trackSelection.getSelectedIndex();
+//			}
+//		});
 
 		// create lobby list
 		list = new JList<String>(new String[] {});
@@ -656,9 +655,10 @@ public class ClientGUI {
 				.addGroup(layout.createParallelGroup().addComponent(lobbyList)
 				/* .addComponent(feedback) */)
 				.addGroup(
-						layout.createParallelGroup().addComponent(createLobby)
-								.addComponent(selectTrack)
-								.addComponent(trackSelection)
+						layout.createParallelGroup()
+//								.addComponent(createLobby)
+//								.addComponent(selectTrack)
+//								.addComponent(trackSelection)
 								.addComponent(joinButton)
 								.addComponent(logOutButton)
 								.addComponent(helpButton)
@@ -673,9 +673,9 @@ public class ClientGUI {
 								.addComponent(lobbyList)
 								.addGroup(
 										layout.createSequentialGroup()
-												.addComponent(createLobby)
-												.addComponent(selectTrack)
-												.addComponent(trackSelection)
+//												.addComponent(createLobby)
+//												.addComponent(selectTrack)
+//												.addComponent(trackSelection)
 												.addComponent(joinButton)
 												.addComponent(logOutButton)
 												.addComponent(helpButton)
@@ -699,12 +699,12 @@ public class ClientGUI {
 				client.commandQueue.add("LGOUR");
 			}
 		});
-		createLobby.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				client.commandQueue.add("LOBCR:" + trackSelect);
-			}
-		});
+//		createLobby.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//
+//				client.commandQueue.add("LOBCR:" + trackSelect);
+//			}
+//		});
 		joinButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
