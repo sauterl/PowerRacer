@@ -164,10 +164,17 @@ public class PlayerManager {
 	}
 
 	public static Player getPlayerWithName(String string) {
-		for (int i = 0; i < PlayerManager.playerlist.size(); i++) {
-			if (PlayerManager.playerlist.get(i).getName().equals(string)) {
-				return PlayerManager.playerlist.get(i);
-			}
+		for (Player player : playerlist) {
+			if (player.getName().equals(string))
+				return player;
+		}
+		return null;
+	}
+
+	public static Player getPlayerWithId(int id) {
+		for (Player player : playerlist) {
+			if (player.id == id)
+				return player;
 		}
 		return null;
 	}

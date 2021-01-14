@@ -7,9 +7,8 @@ import shared.game.PowerRacerGame;
 
 /**
  * Player object with all the player informations.
- * 
- * @author marco
  *
+ * @author marco
  */
 public class Player {
 
@@ -25,23 +24,19 @@ public class Player {
 	public int carIndex;
 	private long endTime;
 	private long startTime;
-	private int kickCounter;
-	private long kickTimer;
 	private int legitPlayer;
 
 	/**
 	 * Constructor of the Player object.
-	 * 
-	 * @param id
-	 *            the player's id on the server
-	 * @param in_Socket
-	 *            the player's communication socket
+	 *
+	 * @param id        the player's id on the server
+	 * @param in_Socket the player's communication socket
 	 */
 	public Player(int id, Socket in_Socket) {
 		this.id = id;
 		this.name = "";
 		this.in_Socket = in_Socket;
-		this.commandQueue = new ConcurrentLinkedQueue<String>();
+		this.commandQueue = new ConcurrentLinkedQueue<>();
 		this.playerSocket = new PlayerSocket(this.id, this.in_Socket, this);
 	}
 
@@ -61,8 +56,8 @@ public class Player {
 		this.heartBeatReturned = true;
 	}
 
-	public void setLobby(Lobby lobby2) {
-		this.lobby = lobby2;
+	public void setLobby(Lobby lobby) {
+		this.lobby = lobby;
 	}
 
 	public Lobby getLobby() {
@@ -109,25 +104,14 @@ public class Player {
 		return this.endTime;
 	}
 
-	public void increaseKickCounter(int i, String msg) {
-		if (kickTimer == 0) {
-			kickTimer = System.currentTimeMillis();
+	public void kick(String msg) {
+
+		commandQueue.add("SKICK:" + msg);
+		try {
+			Thread.sleep(200);
+		} catch (Exception ignored) {
 		}
-		if (((System.currentTimeMillis()) - kickTimer) > 10000) {
-			kickCounter = 0;
-			kickTimer = System.currentTimeMillis();
-		} else {
-			kickCounter += i;
-			kickTimer = System.currentTimeMillis();
-		}
-		if (kickCounter > 4) {
-			commandQueue.add("SKICK:" + msg);
-			try {
-				Thread.sleep(200);
-			} catch (Exception e) {
-			}
-			LobbyLogic.removePlayerComplete(this);
-		}
+		LobbyLogic.removePlayerComplete(this);
 	}
 
 	/**
@@ -138,8 +122,7 @@ public class Player {
 	}
 
 	/**
-	 * @param legitPlayer
-	 *            the legitPlayer to set
+	 * @param legitPlayer the legitPlayer to set
 	 */
 	public void setLegitPlayer(int legitPlayer) {
 		this.legitPlayer = legitPlayer;

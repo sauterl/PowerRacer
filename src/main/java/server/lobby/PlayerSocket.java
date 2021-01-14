@@ -25,8 +25,7 @@ public class PlayerSocket implements Runnable {
 	public Thread receiverThread;
 	public Thread heartbeatThread;
 	public Parser parser;
-	private Player player;
-	private String inComPack;
+	private final Player player;
 	private int heartBeatTicker;
 	private boolean terminate;
 	private boolean heartBeatOn;
@@ -121,7 +120,7 @@ public class PlayerSocket implements Runnable {
 	 */
 	private void Sender() {
 		while (!terminate) {
-			while (this.player.commandQueue.isEmpty() == false) {
+			while (!this.player.commandQueue.isEmpty()) {
 				try {
 					String packet = this.player.commandQueue.remove();
 					out.println(packet);
@@ -145,6 +144,7 @@ public class PlayerSocket implements Runnable {
 		this.parser = new Parser(this.player);
 		while (!terminate) {
 			try {
+				String inComPack;
 				while ((inComPack = in.readLine()) != null) {
 					this.parser.parse(inComPack);
 				}

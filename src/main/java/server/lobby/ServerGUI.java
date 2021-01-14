@@ -44,8 +44,7 @@ public class ServerGUI {
 				if (text.split(":")[0].equals("\\k")) {
 					String[] parts = text.split(":");
 					if (text.split(":").length == 3) {
-						Objects.requireNonNull(PlayerManager.getPlayerWithName(parts[1]))
-								.increaseKickCounter(10, parts[2]);
+						Objects.requireNonNull(PlayerManager.getPlayerWithName(parts[1])).kick(parts[2]);
 					} else {
 						ServerGUI
 								.addToConsole("Not the right number of \":\"\n\\k:name:reason");
@@ -98,7 +97,9 @@ public class ServerGUI {
 		System.out.println("Headless server ready! Type \"help\" for a list of commands.");
 		String helpMessage = "Available commands:\n" +
 				"  help - Print this help dialog.\n" +
-				"  k:NAME:REASON - Kick a player with name NAME displaying the text REASON.\n" +
+				"  k:ID:REASON - Kick a player with id ID displaying the text REASON.\n" +
+				"  k:NAME:REASON - Kick a player with name NAME displaying the text REASON. If there is a player with " +
+				"an ID identical to the specified NAME, the ID takes precedence.\n" +
 				"  b:TEXT - Send server broadcast with text TEXT.\n" +
 				"  players - List currently connected players.\n" +
 				"  lobbies - List currently open lobbies.\n" +
@@ -120,7 +121,7 @@ public class ServerGUI {
 					case "players":
 						System.out.println("Currently online players:");
 						for (Player player : PlayerManager.playerlist) {
-							System.out.println("  " + player.name);
+							System.out.println("  \"" + player.name + "\" - " + player.id);
 						}
 						break;
 					case "lobbies":
@@ -142,11 +143,19 @@ public class ServerGUI {
 						switch (command) {
 							case "k":
 								if (parts.length == 3) {
-									Player player = PlayerManager.getPlayerWithName(parts[1]);
+									Player player;
+									try {
+										int id = Integer.parseInt(parts[1]);
+										player = PlayerManager.getPlayerWithId(id);
+										if (player == null)
+											player = PlayerManager.getPlayerWithName(parts[1]);
+									} catch (NumberFormatException e) {
+										player = PlayerManager.getPlayerWithName(parts[1]);
+									}
 									if (player != null) {
-										player.increaseKickCounter(10, parts[2]);
+										player.kick(parts[2]);
 									} else {
-										System.err.println("No player with name \"" + parts[1] + "\"!");
+										System.err.println("No player with name or ID \"" + parts[1] + "\"!");
 									}
 								} else {
 									System.err.println("Kick command formatted incorrectly!");
