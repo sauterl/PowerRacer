@@ -12,14 +12,13 @@ import shared.game.powerup.Powerup;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Main GUI class, which is also run to start the game.
@@ -324,7 +323,7 @@ public class ClientGUI {
 		// create labels and fields and set their displayed text
 		JLabel title = new JLabel("Select Game Server");
 		feedback = new JLabel();
-		JLabel enterIp = new JLabel("Connect to IP: ");
+		JLabel enterIp = new JLabel("Connect to host:");
 		ipField = new JTextField();
 		connectIpButton = new JButton("Direct Connect");
 		serverIp = new JLabel();
@@ -393,26 +392,29 @@ public class ClientGUI {
 			ServerGUI.addToConsole("Welcome to the Server Console!\nEnter text below to broadcast to all players.");
 		});
 		joinButton.addActionListener(e -> connect(addresses[select].getHostName()));
-		connectIpButton.addActionListener(e -> {
+		ActionListener hostConnectListener = e -> {
 			String input = ipField.getText();
-			Pattern pattern = Pattern.compile(
-					"\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b"
-			);
-			Matcher matcher = pattern.matcher(input);
-			if (matcher.matches()) {
-				feedback.setText("Connecting...");
-				try {
-					connectIpButton.setEnabled(false);
-					connect(InetAddress.getByName(input).getHostName());
-				} catch (UnknownHostException ex) {
-					setFeedback("Unknown Host!");
-					connectIpButton.setEnabled(true);
+			feedback.setText("Connecting...");
+			try {
+				connectIpButton.setEnabled(false);
+				String[] parts = input.split(":");
+				if (parts.length == 2) {
+					try {
+						port = Integer.parseInt(parts[1]);
+					} catch (NumberFormatException ex) {
+						feedback.setText("Host incorrectly formatted");
+						connectIpButton.setEnabled(true);
+						return;
+					}
 				}
-			} else {
-				setFeedback("Not an IP!");
+				connect(InetAddress.getByName(parts[0]).getHostName());
+			} catch (UnknownHostException ex) {
+				setFeedback("Unknown Host!");
 				connectIpButton.setEnabled(true);
 			}
-		});
+		};
+		connectIpButton.addActionListener(hostConnectListener);
+		ipField.addActionListener(hostConnectListener);
 
 		// define GroupLayout for main panel
 		GroupLayout layout = new GroupLayout(panel);
