@@ -1,19 +1,17 @@
 package client.gui;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import shared.game.PowerRacerGame;
 import shared.game.RaceTrack;
-import shared.game.powerup.Boost;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CameraTest {
 
 	public static void main(String[] args) {
-		ConcurrentLinkedQueue<String> dummyCommandQueue = new ConcurrentLinkedQueue<String>();
-		PowerRacerGame game = new PowerRacerGame(4, RaceTrack.GET_RANDOM,
-				new int[] { 0, 1, 3, 4 }, 0, dummyCommandQueue);
-		game.setPlayerNames(new String[] { "Marco", "Beni", "Sim", "Florian" });
-		Camera camera = new Camera(game, 1280, 720, null);
+		ConcurrentLinkedQueue<String> dummyCommandQueue = new ConcurrentLinkedQueue<>();
+		PowerRacerGame game = new PowerRacerGame(4, RaceTrack.GET_RANDOM, new int[]{0, 1, 3, 4}, 0, dummyCommandQueue);
+		game.setPlayerNames(new String[]{"Marco", "Beni", "Sim", "Florian"});
+		new Camera(game, 1280, 720, null);
 
 		try {
 			Thread.sleep(1000);
@@ -26,15 +24,6 @@ public class CameraTest {
 			game.setCountdown(0);
 			game.setControl(true);
 			Thread.sleep(3000);
-			// game.setPause(true);
-			// Thread.sleep(5000);
-			// game.setPause(false);
-//			game.setScoreboard(
-//					new int[] { 11597, 12344, 23323, 34456, 35738, 36127, 40000,
-//							99999 },
-//					new String[] { "Beni", "Marco", "SimeonJackman", "Florian",
-//							"Cake", "Test", "Just4Kicks", "Haxor" });
-//			game.setComplete();
 			while (true) {
 				if (!dummyCommandQueue.isEmpty()) {
 					dummyCommandQueue.clear();

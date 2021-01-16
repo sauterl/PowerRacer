@@ -35,18 +35,17 @@ import shared.game.powerup.Powerup;
 /**
  * The Game's Graphics engine. In control of repainting the screen and
  * periodically updating the game.
- * 
- * @author Florian
  *
+ * @author Florian
  */
 public class Camera extends Component {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	SoundManager sm = new SoundManager(true); // set true for sounds
-	private int music;
+	private final int music;
 
 	ClientGUI clientGUI;
 
@@ -55,21 +54,20 @@ public class Camera extends Component {
 	int carIndex, windowWidth, windowHeight, countdown;
 	Image dbImage;
 	Graphics dbg;
-	// RedrawThread redraw;
 	UpdateThread update;
 	int[][] carPositions;
-	private Font font = new Font("Arial", Font.BOLD, 25),
-			countDownFont = new Font("Arial", Font.BOLD, 40),
-			scoreboardFont = new Font("Courier", Font.BOLD, 40);
-	private boolean control, complete, c, showNames = true, fullscreen,
-			exitMenu;
-	private static final String[] scoreboardPrefixes = { "1st:", "2nd:", "3rd:",
-			"4th:", "5th:", "6th:", "7th:", "8th:" };
+	private final Font font = new Font("Arial", Font.BOLD, 25);
+	private final Font countDownFont = new Font("Arial", Font.BOLD, 40);
+	private final Font scoreboardFont = new Font("Courier", Font.BOLD, 40);
+	private boolean complete;
+	private boolean c;
+	private boolean showNames = true;
+	private boolean fullscreen;
+	private boolean exitMenu;
+	private static final String[] scoreboardPrefixes = {"1st:", "2nd:", "3rd:",
+			"4th:", "5th:", "6th:", "7th:", "8th:"};
 
-	private ConcurrentLinkedQueue<Powerup> powerupVFXList = new ConcurrentLinkedQueue<Powerup>();
-
-	// private Boolean updateInProgress;
-	// Image trackImage;
+	private final ConcurrentLinkedQueue<Powerup> powerupVFXList = new ConcurrentLinkedQueue<>();
 
 	public static final int RENDER_WIDTH = 1280, RENDER_HEIGHT = 720,
 			TILE_SIDE_LENGTH = RENDER_WIDTH / 15;
@@ -77,22 +75,21 @@ public class Camera extends Component {
 			renderTileSideLength = RENDER_WIDTH / zoomLevel,
 			carTileSideLength = (renderTileSideLength / 16) * 24;
 
-	private int checkpoint, checkpointFeedback, maxCheckpoint, maxLap;
+	private int checkpoint;
+	private int checkpointFeedback;
+	private final int maxCheckpoint;
+	private final int maxLap;
 
 	/**
 	 * The Camera Constructor.
-	 * 
-	 * @param game
-	 *            the {@link PowerRacerGame} object this Camera is monitoring
-	 * @param windowWidth
-	 *            the player selected horizontal resolution
-	 * @param windowHeight
-	 *            the player selected vertical resolution
-	 * @param clientGUI
-	 *            the creating {@link ClientGUI}
+	 *
+	 * @param game         the {@link PowerRacerGame} object this Camera is monitoring
+	 * @param windowWidth  the player selected horizontal resolution
+	 * @param windowHeight the player selected vertical resolution
+	 * @param clientGUI    the creating {@link ClientGUI}
 	 */
 	public Camera(PowerRacerGame game, int windowWidth, int windowHeight,
-			ClientGUI clientGUI) {
+				  ClientGUI clientGUI) {
 		maxCheckpoint = game.getMaxCheckpoint();
 		maxLap = game.getMaxLap();
 
@@ -117,12 +114,9 @@ public class Camera extends Component {
 		frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
 				dim.height / 2 - frame.getSize().height / 2);
 
-		// trackImage = drawTrack();
-
 		frame.setVisible(true);
 
 		carPositions = new int[game.getNumberOfPlayers()][2];
-		// redraw = new RedrawThread(frame, 25, updateInProgress);
 		update = new UpdateThread(game, 25, frame);
 	}
 
@@ -168,9 +162,8 @@ public class Camera extends Component {
 	 * Paints the game onto the given Graphics. This method first draws the
 	 * {@link RaceTrack}, then the {@link Collidable}s, then the {@link Car}s,
 	 * then the {@link Powerup}s in the VFX list and finally the HUD.
-	 * 
-	 * @param g
-	 *            the Graphics the game will be drawn on
+	 *
+	 * @param g the Graphics the game will be drawn on
 	 */
 	private void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
@@ -312,25 +305,24 @@ public class Camera extends Component {
 			int dispY = (int) stringBounds.getHeight() / 2;
 			g.drawString(countdown + "", RENDER_WIDTH / 2 - dispX,
 					RENDER_HEIGHT / 2 - dispY);
-		} else
-			if (countdown > -40) {
-				if (countdown == 0) {
-					sm.playSound(6);
-					// loop mainsong after last beep
-				}
-				g.setFont(countDownFont);
-				g.setColor(Color.RED);
-				Rectangle2D stringBounds = g.getFontMetrics()
-						.getStringBounds("GO!", g);
-				int dispX = (int) stringBounds.getWidth() / 2;
-				int dispY = (int) stringBounds.getHeight() / 2;
-				g.drawString("GO!", RENDER_WIDTH / 2 - dispX,
-						RENDER_HEIGHT / 2 - dispY);
-				game.setCountdown(countdown - 1);
-				if (countdown == -39) {
-					sm.loopSound(music);
-				}
+		} else if (countdown > -40) {
+			if (countdown == 0) {
+				sm.playSound(6);
+				// loop mainsong after last beep
 			}
+			g.setFont(countDownFont);
+			g.setColor(Color.RED);
+			Rectangle2D stringBounds = g.getFontMetrics()
+					.getStringBounds("GO!", g);
+			int dispX = (int) stringBounds.getWidth() / 2;
+			int dispY = (int) stringBounds.getHeight() / 2;
+			g.drawString("GO!", RENDER_WIDTH / 2 - dispX,
+					RENDER_HEIGHT / 2 - dispY);
+			game.setCountdown(countdown - 1);
+			if (countdown == -39) {
+				sm.loopSound(music);
+			}
+		}
 		g.drawImage(game.getPowerupImage(), RENDER_WIDTH - TILE_SIDE_LENGTH, 0,
 				TILE_SIDE_LENGTH, TILE_SIDE_LENGTH, null);
 
@@ -350,7 +342,7 @@ public class Camera extends Component {
 				try {
 					if (scoreboard[i].length() > 11) {
 						g.drawString(scoreboardPrefixes[i]
-								+ scoreboard[i].substring(0, 9) + "\u2026",
+										+ scoreboard[i].substring(0, 9) + "\u2026",
 								RENDER_WIDTH / 4 + 20,
 								RENDER_HEIGHT / 16 + 50 + i * 70);
 					} else {
@@ -374,55 +366,53 @@ public class Camera extends Component {
 			int dispX = (int) stringBounds.getWidth() / 2;
 			g.drawString("Press x to return to lobby.",
 					RENDER_WIDTH / 2 - dispX, 7 * RENDER_HEIGHT / 8 + 10);
-		} else
-			if (game.getPause()) {
-				g.setFont(countDownFont);
-				Rectangle2D stringBounds = g.getFontMetrics()
-						.getStringBounds("A PLAYER HAS LEFT THE GAME", g);
-				int dispX = (int) stringBounds.getWidth() / 2;
-				int dispY = (int) stringBounds.getHeight() / 2;
-				int posX = RENDER_WIDTH / 2 - dispX;
-				int posY = RENDER_HEIGHT / 2 - dispY;
-				g.setColor(Color.BLACK);
-				g.fillRect(posX - 10, posY - 10, 2 * dispX + 20,
-						2 * dispY + 20);
-				g.setColor(Color.WHITE);
-				g.fillRect(posX - 5, posY - 5, 2 * dispX + 10, 2 * dispY + 10);
-				g.setColor(Color.BLACK);
-				g.drawString("A PLAYER HAS LEFT THE GAME", posX,
-						posY + (int) (1.7 * dispY));
+		} else if (game.getPause()) {
+			g.setFont(countDownFont);
+			Rectangle2D stringBounds = g.getFontMetrics()
+					.getStringBounds("A PLAYER HAS LEFT THE GAME", g);
+			int dispX = (int) stringBounds.getWidth() / 2;
+			int dispY = (int) stringBounds.getHeight() / 2;
+			int posX = RENDER_WIDTH / 2 - dispX;
+			int posY = RENDER_HEIGHT / 2 - dispY;
+			g.setColor(Color.BLACK);
+			g.fillRect(posX - 10, posY - 10, 2 * dispX + 20,
+					2 * dispY + 20);
+			g.setColor(Color.WHITE);
+			g.fillRect(posX - 5, posY - 5, 2 * dispX + 10, 2 * dispY + 10);
+			g.setColor(Color.BLACK);
+			g.drawString("A PLAYER HAS LEFT THE GAME", posX,
+					posY + (int) (1.7 * dispY));
 
-				g.setFont(font);
-				Rectangle2D stringBounds2 = g.getFontMetrics()
-						.getStringBounds("Press x to return to lobby.", g);
-				int dispX2 = (int) stringBounds2.getWidth() / 2;
-				g.setColor(Color.WHITE);
-				g.fillRect(RENDER_WIDTH / 2 - dispX2 - 5,
-						3 * RENDER_HEIGHT / 4 - 20
-								- (int) stringBounds2.getHeight(),
-						(int) stringBounds2.getWidth() + 10,
-						(int) stringBounds2.getHeight() + 10);
-				g.setColor(Color.BLACK);
-				g.drawString("Press x to return to lobby.",
-						RENDER_WIDTH / 2 - dispX2, 3 * RENDER_HEIGHT / 4 - 15);
-			} else
-				if (exitMenu) {
-					String message = "Leave Game?";
-					g.setFont(countDownFont);
-					drawStringCenteredWithBox(g, message, 0);
+			g.setFont(font);
+			Rectangle2D stringBounds2 = g.getFontMetrics()
+					.getStringBounds("Press x to return to lobby.", g);
+			int dispX2 = (int) stringBounds2.getWidth() / 2;
+			g.setColor(Color.WHITE);
+			g.fillRect(RENDER_WIDTH / 2 - dispX2 - 5,
+					3 * RENDER_HEIGHT / 4 - 20
+							- (int) stringBounds2.getHeight(),
+					(int) stringBounds2.getWidth() + 10,
+					(int) stringBounds2.getHeight() + 10);
+			g.setColor(Color.BLACK);
+			g.drawString("Press x to return to lobby.",
+					RENDER_WIDTH / 2 - dispX2, 3 * RENDER_HEIGHT / 4 - 15);
+		} else if (exitMenu) {
+			String message = "Leave Game?";
+			g.setFont(countDownFont);
+			drawStringCenteredWithBox(g, message, 0);
 
-					String info1 = "Press x to return to lobby.";
-					g.setFont(font);
-					drawStringCenteredWithBox(g, info1, RENDER_HEIGHT / 8);
+			String info1 = "Press x to return to lobby.";
+			g.setFont(font);
+			drawStringCenteredWithBox(g, info1, RENDER_HEIGHT / 8);
 
-					String info2 = "Press esc to close menu.";
-					g.setFont(font);
-					drawStringCenteredWithBox(g, info2, RENDER_HEIGHT / 4);
-				}
+			String info2 = "Press esc to close menu.";
+			g.setFont(font);
+			drawStringCenteredWithBox(g, info2, RENDER_HEIGHT / 4);
+		}
 	}
 
 	private void drawStringCenteredWithBox(Graphics g, String text,
-			int deltaY) {
+										   int deltaY) {
 		Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(text, g);
 		int dispX = (int) stringBounds.getWidth() / 2;
 		int dispY = (int) stringBounds.getHeight() / 2;
@@ -440,11 +430,9 @@ public class Camera extends Component {
 	/**
 	 * Checks if the given point (x,y) lies within the bounds of the Camera and
 	 * therefore needs to be drawn.
-	 * 
-	 * @param x
-	 *            the horizontal position of the point
-	 * @param y
-	 *            the vertical position of the point
+	 *
+	 * @param x the horizontal position of the point
+	 * @param y the vertical position of the point
 	 * @return whether or not the point (x,y) is within draw distance
 	 */
 	private boolean isInCameraBounds(int x, int y) {
@@ -455,9 +443,8 @@ public class Camera extends Component {
 
 	/**
 	 * Rotates the image of the {@link Car} according to its actual rotation.
-	 * 
-	 * @param carIndex
-	 *            the carIndex of the requested {@link Car}
+	 *
+	 * @param carIndex the carIndex of the requested {@link Car}
 	 * @return the correctly rotated image of the {@link Car}
 	 */
 	private Image rotateCar(int carIndex) {
@@ -465,7 +452,7 @@ public class Camera extends Component {
 				carTileSideLength, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D sg = (Graphics2D) si.getGraphics();
 		AffineTransform at = new AffineTransform();
-		at.translate(carTileSideLength / 2, carTileSideLength / 2);
+		at.translate(carTileSideLength / 2., carTileSideLength / 2.);
 		at.rotate(game.getCarRotation(carIndex) + Math.PI / 2);
 		sg.setTransform(at);
 		sg.drawImage(game.getCarImage(carIndex), -renderTileSideLength / 2,
@@ -477,9 +464,8 @@ public class Camera extends Component {
 	/**
 	 * Rotates the image of the {@link Collidable} according to its actual
 	 * rotation.
-	 * 
-	 * @param c
-	 *            the {@link Collidable} to be rotated
+	 *
+	 * @param c the {@link Collidable} to be rotated
 	 * @return the correctly rotated image of the {@link Collidable}
 	 */
 	private Image rotateCollidable(Collidable c) {
@@ -487,7 +473,7 @@ public class Camera extends Component {
 				carTileSideLength, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D sg = (Graphics2D) si.getGraphics();
 		AffineTransform at = new AffineTransform();
-		at.translate(carTileSideLength / 2, carTileSideLength / 2);
+		at.translate(carTileSideLength / 2., carTileSideLength / 2.);
 		at.rotate(c.getRotation() + Math.PI / 2);
 		sg.setTransform(at);
 		sg.drawImage(c.getImage(), -renderTileSideLength / 2,
@@ -498,7 +484,7 @@ public class Camera extends Component {
 
 	/**
 	 * Fades the checkpoint feedback.
-	 * 
+	 *
 	 * @return the faded checkpoint image.
 	 */
 	private Image fadeCheckpointFeedback() {
@@ -512,41 +498,24 @@ public class Camera extends Component {
 		return si;
 	}
 
-	// private Image drawTrack() {
-	// BufferedImage si = new BufferedImage(renderTileSideLength
-	// * game.getTrackWidth(), renderTileSideLength
-	// * game.getTrackHeight(), BufferedImage.TYPE_INT_ARGB);
-	// Graphics2D sg = (Graphics2D) si.getGraphics();
-	// for (int i = 0; i < game.getTrackWidth(); i++) {
-	// for (int j = 0; j < game.getTrackHeight(); j++) {
-	// sg.drawImage(game.getTile(i, j), i * renderTileSideLength, j
-	// * renderTileSideLength, renderTileSideLength,
-	// renderTileSideLength, null);
-	// }
-	// }
-	// return si;
-	// }
-
 	/**
 	 * Terminates the camera, closes the update thread and sets used resources
 	 * free.
 	 */
 	public void terminate() {
-		// redraw.terminate();
 		update.terminate();
 		frame.dispose();
 	}
 
 	/**
 	 * The Keyboardlistener for the {@link Camera}
-	 * 
-	 * @author Florian
 	 *
+	 * @author Florian
 	 */
 	private class AL extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
-			control = game.getControl();
+			boolean control = game.getControl();
 
 			if (complete || game.getPause() || exitMenu) {
 				if (keyCode == KeyEvent.VK_X) {
@@ -561,7 +530,6 @@ public class Camera extends Component {
 				}
 				if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) {
 					game.setCarInputDown(carIndex, true);
-					// sm.playSound(3);
 				}
 				if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A) {
 					game.setCarInputLeft(carIndex, true);
@@ -621,11 +589,7 @@ public class Camera extends Component {
 				sm.toggleMusic(music);
 			}
 			if (keyCode == KeyEvent.VK_T) {
-				if (showNames) {
-					showNames = false;
-				} else {
-					showNames = true;
-				}
+				showNames = !showNames;
 			}
 			if (keyCode == KeyEvent.VK_1) {
 				frame.setLocation(0, 0);
@@ -673,56 +637,17 @@ public class Camera extends Component {
 	}
 }
 
-// class RedrawThread extends Thread {
-// boolean stop;
-// JFrame frame;
-// int redrawSleep;
-// private long startTime;
-//
-// // private Boolean updateInProgress;
-//
-// public RedrawThread(JFrame frame, int framesPerSecond,
-// Boolean updateInProgress) {
-// this.frame = frame;
-// this.redrawSleep = 1000 / framesPerSecond;
-// this.start();
-// // this.updateInProgress = updateInProgress;
-// }
-//
-// @Override
-// public void run() {
-// startTime = System.currentTimeMillis();
-// while (!stop) {
-// try {
-// frame.repaint();
-// while (System.currentTimeMillis() < startTime + redrawSleep) {
-// Thread.sleep(1);
-// }
-// } catch (InterruptedException e) {
-// }
-// startTime += redrawSleep;
-// }
-// }
-//
-// public void terminate() {
-// stop = true;
-// interrupt();
-// }
-// }
-
 /**
  * The thread keeping track of updating both the camera and the game logic.
  * Compensates for lost time by setting one start time and updating until the
  * quota has been fulfilled.
- * 
- * @author Florian
  *
+ * @author Florian
  */
 class UpdateThread extends Thread {
 	boolean stop;
 	PowerRacerGame game;
 	int updateSleep;
-	private long startTime;
 	// private Boolean updateInProgress;
 	JFrame frame;
 
@@ -736,7 +661,7 @@ class UpdateThread extends Thread {
 
 	@Override
 	public void run() {
-		startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 		while (!stop) {
 			try {
 				game.update();
@@ -744,7 +669,7 @@ class UpdateThread extends Thread {
 				while (System.currentTimeMillis() - startTime < updateSleep) {
 					Thread.sleep(1);
 				}
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 			}
 			startTime += updateSleep;
 		}

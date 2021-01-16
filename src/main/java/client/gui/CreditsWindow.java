@@ -1,41 +1,30 @@
 package client.gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 /**
  * Opens window displaying the game's credits.
- * 
- * @author Florian
  *
+ * @author Florian
  */
 public class CreditsWindow extends Thread {
-	private JFrame frame;
-	private JTextArea creditsArea;
-	private Queue<String> credits;
+	private final JFrame frame;
+	private final JTextArea creditsArea;
+	private final Queue<String> credits;
 	private boolean close;
-	private JButton creditsButton;
-	private SoundManager sound;
+	private final JButton creditsButton;
+	private final SoundManager sound;
 
 	/**
 	 * Constructor for CreditsWindow.
-	 * 
-	 * @param button
-	 *            the button that opened this credits window, which will need to
-	 *            be set enabled again after the window is closed.
+	 *
+	 * @param button the button that opened this credits window, which will need to
+	 *               be set enabled again after the window is closed.
 	 */
 	public CreditsWindow(JButton button) {
 		creditsButton = button;
@@ -61,14 +50,10 @@ public class CreditsWindow extends Thread {
 		scrollPane.setPreferredSize(new Dimension(500, 500));
 
 		JButton okButton = new JButton("Ok");
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
+		okButton.addActionListener(e -> close());
 
 		// Add the credits to the queue in the order it should be displayed
-		credits = new ArrayDeque<String>(100);
+		credits = new ArrayDeque<>(100);
 		credits.offer("PowerRacer Credits");
 		credits.offer("");
 		credits.offer("Programming");
@@ -208,9 +193,8 @@ public class CreditsWindow extends Thread {
 	/**
 	 * Adds the argument message to the JTextArea creditsArea and scrolls its
 	 * Focus down to the new credit.
-	 * 
-	 * @param message
-	 *            text to be added to credits
+	 *
+	 * @param message text to be added to credits
 	 */
 	public void display(String message) {
 		creditsArea.append(message + "\n");
