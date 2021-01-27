@@ -1,13 +1,11 @@
 package client.gui;
 
-import java.util.Random;
-
 import shared.game.PresetTracks;
-import shared.game.RaceTrack;
+
+import java.util.Random;
 
 /**
  * @author Simeon
- *
  */
 public class RandomMapGenerator {
 	private static int minCheck = 5;
@@ -17,9 +15,9 @@ public class RandomMapGenerator {
 	private int enter = 3;
 	private byte xpos = 16;
 	private byte ypos = 16;
-	private byte startx = xpos;
-	private byte starty = ypos;
-	private Random ran = new Random();
+	private final byte startx = xpos;
+	private final byte starty = ypos;
+	private final Random ran = new Random();
 	// the overflowcounter checks if there are still paths available
 	private int overFlowCounter;
 	private int checkpointCounter;
@@ -29,11 +27,46 @@ public class RandomMapGenerator {
 	private int searchFlowCounter;
 	private int[][] itemBoxPositions;
 	private boolean[] check;
-	// dir is the direction to go for the next tile
-	private int dir;
-	private int[][] startingPositions = new int[][] {
-			{ startx + 1, starty + 2 }, { startx, starty + 3 },
-			{ startx + 1, starty + 4 }, { startx, starty + 5 } };
+	private final int[][] startingPositions = new int[][]{
+			{startx + 1, starty + 2}, {startx, starty + 3}, {startx + 1, starty + 4}, {startx, starty + 5}};
+
+	/**
+	 * Generates a new random track with given size (in tiles).
+	 *
+	 * @param trackSize track size length in tiles
+	 * @return track as string
+	 */
+	public static String generate(int trackSize) {
+		// Enforce minimum track size
+		int size = Math.max(trackSize, 4) * 8;
+
+		// Calculate the minimum number of checkpoints based on track size
+		int checkpoints = Math.max(Math.min(trackSize, 10), 3);
+
+		// Initialize values
+		boolean[] check = new boolean[4];
+		int[][] itemBoxPositions = new int[48][48];
+		int enter = 3;
+		byte startx = 16;
+		byte starty = 16;
+		byte xpos = startx;
+		byte ypos = starty;
+		int overFlowCounter = 0;
+		int checkpointCounter = 0;
+		int itemCounter = 1;
+		int itemNum = 0;
+		int checkpointNum = 0;
+		int searchFlowCounter = 0;
+		String[][] paintedTiles = new String[trackSize][trackSize];
+		byte[][] a = new byte[size][size];
+		// TODO: Finish movinng random track generation to static method
+//		loadTrackTile(0, enter, 1);
+//
+//		initialize();
+//		createMap();
+
+		return null;
+	}
 
 	/**
 	 * This method resets all the values to their standard value. This method is
@@ -59,19 +92,14 @@ public class RandomMapGenerator {
 	}
 
 	public RandomMapGenerator(int size) {
-		// System.out.println("Creating a Random Track...");
 		setSize(size);
 		minCheck = setCheckpoints();
 		initialize();
 		createMap();
-		// arrToString(paintedTiles);
-		// System.out.println("Track created.");
-		// new TrackEdit(this.width, this.height, a);
 	}
 
 	private int setCheckpoints() {
-		int num;
-		num = size / 8;
+		int num = size / 8;
 		if (num < 3) {
 			num = 3;
 		}
@@ -90,10 +118,11 @@ public class RandomMapGenerator {
 	private void createMap() {
 		while (!(xpos == startx - 8 && ypos == starty)) {
 			setDirArray(check, true);
+			// dir is the direction to go for the next tile
+			int dir;
 			try {
 				dir = getNextDir(check);
 			} catch (Exception e) {
-				// System.out.println("No Dir Reset");
 				initialize();
 				continue;
 			}
@@ -138,9 +167,7 @@ public class RandomMapGenerator {
 			}
 		}
 		loadTrackTile(-1, enter, 1);
-		// System.out.println("letztes Tile gesetzt!");
 		// Minimum amount of checkpoints
-
 	}
 
 	/**
@@ -195,11 +222,10 @@ public class RandomMapGenerator {
 	 * this method check which direction would go out of bounds therefore it
 	 * calls the method checkBorder which has the corresponding algorithm
 	 */
-	private boolean[] setDirArray(boolean[] check, boolean recursive) {
+	private void setDirArray(boolean[] check, boolean recursive) {
 		for (int i = 0; i < 4; i++) {
 			check[i] = checkBorder(i, recursive);
 		}
-		return check;
 	}
 
 	/**
@@ -241,9 +267,7 @@ public class RandomMapGenerator {
 			}
 		}
 		if (recursive) {
-			if (!isPathAvailable(i)) {
-				return false;
-			}
+			return isPathAvailable(i);
 		}
 		return true;
 	}
@@ -253,7 +277,6 @@ public class RandomMapGenerator {
 	 * the size 8 also sets default size to 32 if small numbers are inserted
 	 */
 	private void setSize(int size) {
-
 		if (size < 32) {
 			size = 32;
 		}
@@ -267,10 +290,7 @@ public class RandomMapGenerator {
 	private void loadTrackTile(int checkpoint, int enter, int exit) {
 
 		TrackTile t = new TrackTile(checkpoint, enter, exit);
-		paintedTiles[xpos / 8][ypos / 8] = t.getEnter() + "_" + t.getExit()
-				+ "_" + checkpoint;
-		// System.out.println(xpos + "/" + ypos + "\t" + t.getEnter()+"/"
-		// +t.getExit());
+		paintedTiles[xpos / 8][ypos / 8] = t.getEnter() + "_" + t.getExit() + "_" + checkpoint;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (t.getArray(i, j) != 0) {
@@ -314,7 +334,6 @@ public class RandomMapGenerator {
 		return (byte) randomNum;
 	}
 
-	@SuppressWarnings("unused")
 	private void arrToString(String[][] a) {
 		for (int i = 0; i < a.length; i++) {
 			for (int j = 0; j < a.length; j++) {
@@ -414,7 +433,6 @@ public class RandomMapGenerator {
 			sb.append(rmg.getItemPositions()[i][1]);
 			sb.append("%");
 		}
-		// System.out.println(sb.toString());
 		return sb.toString();
 	}
 
@@ -427,15 +445,10 @@ public class RandomMapGenerator {
 			String[] rows = items[0].split("%");
 			String[][] trackArray = new String[rows.length][rows.length];
 			for (int i = 0; i < rows.length; i++) {
-				// System.out.println("row: " + rows[i]);
 				String[] elements = rows[i].split("&");
-				for (int j = 0; j < elements.length; j++) {
-					// System.out.println("element: " + elements[j]);
-					trackArray[i][j] = elements[j];
-				}
+				System.arraycopy(elements, 0, trackArray[i], 0, elements.length);
 			}
-			byte[][] track = reverseTrack(trackArray);
-			return track;
+			return reverseTrack(trackArray);
 		} catch (Exception e) {
 			return PresetTracks.RACETRACK_SAND;
 		}
@@ -463,13 +476,10 @@ public class RandomMapGenerator {
 				pos[i][1] = Integer.parseInt(place[1]);
 				pos[i + rows.length][0] = Integer.parseInt(place[0]) - 1;
 				pos[i + rows.length][1] = Integer.parseInt(place[1]);
-				// System.out.println( Integer.parseInt(place[0]) + "/" +
-				// Integer.parseInt(place[1]));
-
 			}
 			return pos;
 		} catch (Exception e) {
-			return new int[][] { { 28, 2 }, { 27, 3 }, { 28, 4 }, { 27, 5 } };
+			return new int[][]{{28, 2}, {27, 3}, {28, 4}, {27, 5}};
 
 		}
 
@@ -484,15 +494,13 @@ public class RandomMapGenerator {
 				String[] place = rows[i].split("&");
 				pos[i][0] = Integer.parseInt(place[0]);
 				pos[i][1] = Integer.parseInt(place[1]);
-				// System.out.println( Integer.parseInt(place[0]) + "/" +
-				// Integer.parseInt(place[1]));
 			}
 			return pos;
 		} catch (Exception e) {
-			return new int[][] { { 47, 38 }, { 46, 38 }, { 45, 38 },
-					{ 44, 38 }, { 32, 36 }, { 33, 36 }, { 34, 36 }, { 35, 36 },
-					{ 4, 36 }, { 5, 36 }, { 6, 36 }, { 7, 36 }, { 8, 36 },
-					{ 17, 5 }, { 17, 4 }, { 17, 3 }, { 17, 2 } };
+			return new int[][]{{47, 38}, {46, 38}, {45, 38},
+					{44, 38}, {32, 36}, {33, 36}, {34, 36}, {35, 36},
+					{4, 36}, {5, 36}, {6, 36}, {7, 36}, {8, 36},
+					{17, 5}, {17, 4}, {17, 3}, {17, 2}};
 		}
 	}
 
