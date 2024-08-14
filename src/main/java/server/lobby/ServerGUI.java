@@ -4,6 +4,9 @@ import shared.game.RaceTrack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -101,17 +104,22 @@ public class ServerGUI {
 	public static void runServerConsole() {
 		addToConsole("Headless server ready! Type \"help\" for a list of commands.");
 
-		Scanner scan = new Scanner(System.in);
-		while (true) {
-			try {
-				String input = scan.nextLine();
-				if (parseInput(input))
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+			String input;
+			while (true) {
+				input = reader.readLine();
+				if (input == null) {
+					// Handle the null input case (e.g., CTRL-D) gracefully and continue the loop
+					continue;
+				}
+				if (parseInput(input)) {
 					break;
-			} catch (NoSuchElementException e) {
-				// CTRL-D detected
-				break;
+				}
 			}
+		} catch (IOException e) {
+			addToConsole("An error occurred while reading input: " + e.getMessage());
 		}
+
 		addToConsole("Exiting server...");
 		System.exit(0);
 	}
