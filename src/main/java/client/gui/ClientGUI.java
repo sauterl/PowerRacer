@@ -728,7 +728,7 @@ public class ClientGUI {
 
 		JLabel selectControlType = new JLabel("Select Controls:");
 		JComboBox<String> controlTypeSelection = new JComboBox<>(new String[]{TANK_CONTROLS, SIMPLE_CONTROLS});
-		controlTypeSelection.setSelectedItem(controlType);
+		controlTypeSelection.setSelectedItem(controlType == ControlType.TANK ? TANK_CONTROLS : SIMPLE_CONTROLS);
 		controlTypeSelection.setMaximumSize(toggleReadyButton.getSize());
 		controlTypeSelection.addActionListener(e -> {
 			switch ((String) Objects.requireNonNull(controlTypeSelection.getSelectedItem())) {
